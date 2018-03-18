@@ -7,7 +7,7 @@ Tags: Release,Announcement,Blog
 ...
 I published flat file CMS 'BoothCMS' first preview release on GitHub.
 
-https://github.com/DBC-Works/BoothCMS
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)
 
 BoothCMS is under the strong influence of [Pico](http://picocms.org/)(especially early version). No administration function. To publish contents, you create it as files and copy to the web server. Features that are not in standard state Pico are as follows:
 
