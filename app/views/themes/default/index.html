@@ -83,13 +83,13 @@
               </div>
 {% if as_list %}
               <div>
-                (<a href="{{ content.path }}">View content</a>)
+                (<a href="{{ site_url }}{{ content.path }}">View content</a>)
               </div>
 {% endif %}
 {% endif %}
 
 {% if content.tags %}
-              <div>{% for tag in content.tags %} <a href="/tags/{{tag|e}}">#{{ tag|e }}</a>{% endfor %}</div>
+              <div>{% for tag in content.tags %} <a href="{{ site_url }}/tags/{{tag|e}}">#{{ tag|e }}</a>{% endfor %}</div>
 {% endif %}
               <div>Publish: <time>{{ content.date|date(fmt_dt) }}</time> / Update: <time>{{ content.update|date(fmt_dt) }}</time></div>
             </article>
@@ -98,11 +98,11 @@
 {% if content.prev or content.next %}
           <div>
 {% if content.next %}
-            &lt;&lt; <a href="{{ content.next.path }}">{{ content.next.title|e }}</a>
+            &lt;&lt; <a href="{{ site_url }}{{ content.next.path }}">{{ content.next.title|e }}</a>
 {% endif %}
 {% if content.prev and content.next %} | {% endif %}
 {% if content.prev %}
-            <a href="{{ content.prev.path }}">{{ content.prev .title|e }}</a> &gt;&gt;
+            <a href="{{ site_url }}{{ content.prev.path }}">{{ content.prev .title|e }}</a> &gt;&gt;
 {% endif %}
           </div>
 {% endif %}
@@ -115,12 +115,12 @@
               <div v-html="additionalContent.body"></div>
 {% if as_list %}
               <div>
-                (<a v-bind:href="additionalContent.path">View content</a>)
+                (<a v-bind:href="'{{ site_url }}' + additionalContent.path">View content</a>)
               </div>
 {% endif %}
 {% verbatim %}
               <div v-if="0 &lt; additionalContent.tags.length">
-                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="'/tags/' + tag">#{{ tag }}</a>
+                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="'{{ site_url }}/tags/' + tag">#{{ tag }}</a>
                     <template v-if="index &lt; additionalContent.tags.length - 1"> </template>
                   </span>
               </div>
@@ -140,7 +140,7 @@
           <h2>Tag set</h2>
           <ul>
 {% for tag_name, tag_values in tag_set %}
-            <li>{{ tag_name|e }}: <a href="/tags/{{tag_name|e}}">{{tag_values|length}}</a></li>
+            <li>{{ tag_name|e }}: <a href="{{ site_url }}/tags/{{tag_name|e}}">{{tag_values|length}}</a></li>
 {% endfor %}
           </ul>
         </section>
@@ -154,7 +154,7 @@
         <h5>Recent updates</h5>
         <ul>
 {% for support_content in support_contents %}
-          <li><a href="{{ support_content.path }}">{{ support_content.title|e }}</a></li>
+          <li><a href="{{ site_url }}{{ support_content.path }}">{{ support_content.title|e }}</a></li>
 {% endfor %}
         </ul>
 {% endif %}
