@@ -1,0 +1,11 @@
+{% set fmt_iso8601 = 'Y-m-d\\TH:i:sP' %}
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for content in main_contents %}
+    <url>
+        <loc>{{ site_url }}{{ content.path }}</loc>
+        <lastmod>{{ content.update|date(fmt_iso8601) }}</lastmod>
+        <changefreq>{{ sitemap_changefreq }}</changefreq>
+    </url>
+{% endfor %}
+</urlset>

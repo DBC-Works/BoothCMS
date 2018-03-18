@@ -1,0 +1,214 @@
+{% set fmt_dt = format_datetime %}
+{% set fmt_iso8601_date = 'Y-m-d' %}
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" {% if lang %}lang="{{ lang }}" xml:lang="{{ lang }}" {% endif %}>
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="alternate" href="{{ site_url }}/feed" type="application/atom+xml" />
+  <link rel="index" href="{{ site_url }}/" />
+  <link rel="contents" href="{{ site_url }}/" />
+  <link rel="start" href="{{ site_url }}/" />
+{% if author %}
+  <meta name="author" content="{{ author|e }}" />
+  <meta name="DC.creator" content="{{ author|e }}" />
+{% endif %}
+  <meta name="DC.type" content="Text" />
+{% if create_time %}
+  <meta name="DCTERMS.created" content="{{ create_time|date(fmt_iso8601_date) }}" />
+{% endif %}
+  <meta name="DCTERMS.modified" content="{{ update_time|date(fmt_iso8601_date) }}" />
+  <meta property="og:site_name" content="{{ site_title|e }}" />
+{% if title %}
+  <meta property="og:title" content="{{ title|e }}" />
+{% else %}
+  <meta property="og:title" content="{{ site_title|e }}" />
+{% endif %}
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{ site_url }}/{{ path }}" />
+{% if image_path %}
+  <meta property="og:image" content="{{ site_url }}/{{ image_path }}" />
+{% endif %}
+{% if description %}
+  <meta property="og:description" content="{{ description|e }}" />
+  <meta name="description" content="{{ description|e }}" />
+{% endif %}
+{% if tags %}
+{% autoescape %}
+  <meta name="keyword" content="{{ tags|join(',') }}" />
+{% endautoescape %}
+{% endif %}
+{% if site_author_twitter %}
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:site" content="{{ site_author_twitter }}" />
+{% endif %}
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ajusa/lit@1.0.0/dist/lit.css" />
+  <style>
+    .additionalContentStyle, moreButtonStyle {
+      display: none;
+    }
+  </style>
+  <title>{% if title %}{{ title|e }} - {% endif %}{{ site_title }}</title>
+</head>
+<body>
+  <div id="app" class="c">
+    <header class="row" >
+      <nav class="card">
+        <div class="col"><a href="{{ site_url }}/">Home</a></div>
+        <div class="col"><a href="{{ site_url }}/LICENSE">LICENSE</a></div>
+        <div class="col"><a href="{{ site_url }}/doc/">Document</a></div>
+        <div class="col"><a href="{{ site_url }}/blog/">Blog</a></div>
+        <div class="col"><a href="#">GitHub</a></div>
+      </nav>
+    </header>
+    <main class="row" role="main">
+      <div class="9 col">
+
+{% if main_contents %}
+      <!-- Main contets -->
+      <section>
+{% if as_list and title %}
+          <h1>{{ title|e }}</h1>
+{% endif %}
+
+{% for content in main_contents %}
+          <div class="card">
+            <article>
+              <h2>{{ content.title|e }}</h2>
+{% if content.body %}
+              <div>
+{{ content.body }}
+              </div>
+{% if as_list %}
+              <div>
+                (<a href="{{ content.path }}">View content</a>)
+              </div>
+{% endif %}
+{% endif %}
+
+{% if content.tags %}
+              <div>{% for tag in content.tags %} <a href="/tags/{{tag|e}}">#{{ tag|e }}</a>{% endfor %}</div>
+{% endif %}
+              <div>Publish: <time>{{ content.date|date(fmt_dt) }}</time> / Update: <time>{{ content.update|date(fmt_dt) }}</time></div>
+            </article>
+          </div><!-- .card -->
+
+{% if content.prev or content.next %}
+          <div>
+{% if content.next %}
+            &lt;&lt; <a href="{{ content.next.path }}">{{ content.next.title|e }}</a>
+{% endif %}
+{% if content.prev and content.next %} | {% endif %}
+{% if content.prev %}
+            <a href="{{ content.prev.path }}">{{ content.prev .title|e }}</a> &gt;&gt;
+{% endif %}
+          </div>
+{% endif %}
+{% endfor %}{# main_contents #}
+
+{% if has_following %}
+          <div class="card additionalContentStyle" v-bind:style="additionalContentStyle" v-for="additionalContent in additionalContents">
+            <article>
+              <h2>{{ '{{' }} additionalContent.title {{ '}}' }}</h2>
+              <div v-html="additionalContent.body"></div>
+{% if as_list %}
+              <div>
+                (<a v-bind:href="additionalContent.path">View content</a>)
+              </div>
+{% endif %}
+{% verbatim %}
+              <div v-if="0 &lt; additionalContent.tags.length">
+                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="'/tags/' + tag">#{{ tag }}</a>
+                    <template v-if="index &lt; additionalContent.tags.length - 1"> </template>
+                  </span>
+              </div>
+              <div>Publish: <time>{{ additionalContent.date }}</time> / Update: <time>{{ additionalContent.update }}</time></div>
+            </article>
+          </div><!-- .card -->
+          <div class="moreButtonStyle" v-bind:style="moreButtonStyle" v-if="moreButtonVisible">
+            <button class="btn" v-on:click="onClickMore">More...</button>
+          </div>
+{% endverbatim %}
+{% endif %}{# has_following #}
+        </section>
+{% endif %}
+
+{% if tag_set %}
+        <section>
+          <h2>Tag set</h2>
+          <ul>
+{% for tag_name, tag_values in tag_set %}
+            <li>{{ tag_name|e }}: <a href="/tags/{{tag_name|e}}">{{tag_values|length}}</a></li>
+{% endfor %}
+          </ul>
+        </section>
+{% endif %}{# tag_set #}
+
+      </div><!-- .9 .col -->
+
+      <!-- Support contets -->
+      <aside class="3 col">
+{% if support_contents %}
+        <h5>Recent updates</h5>
+        <ul>
+{% for support_content in support_contents %}
+          <li><a href="{{ support_content.path }}">{{ support_content.title|e }}</a></li>
+{% endfor %}
+        </ul>
+{% endif %}
+      </aside><!-- .3 .col -->
+    </main><!-- .row -->
+  </div><!-- .c -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        additionalContentStyle: {
+          display: 'none'
+        },
+        moreButtonStyle: {
+          display: 'none'
+        },
+        nextPageIndex: 1,
+        moreButtonVisible: {{ has_following ? 'true' : 'false' }},
+        additionalContents: []
+      },
+      mounted: function() {
+        this.additionalContentStyle.display = this.moreButtonStyle.display = 'block';
+        var links = document.getElementsByTagName('link');
+        for (var index = 0; index !== links.length; ++index) {
+          this.correctHostname(links[index], 'href');
+        }
+        var anchors = document.getElementsByTagName('a');
+        for (var index = 0; index !== anchors.length; ++index) {
+          this.correctHostname(anchors[index], 'href');
+        }
+      },
+      methods: {
+        correctHostname: function(element, attrName) {
+          element.setAttribute(attrName, element.getAttribute(attrName).replace('http://example.com', window.location.origin));
+        },
+        onClickMore: function(e) {
+          var url = '{{ site_url }}/following/' + this.nextPageIndex + '{{path}}';
+          var self = this;
+          axios.get(url.replace('http://example.com', window.location.origin))
+            .then(function (response) {
+              self.moreButtonVisible = response.data.hasFollowing;
+              self.additionalContents = self.additionalContents.concat(response.data.contents);
+              ++(self.nextPageIndex);
+            })
+            .catch(function (error) {
+              console.log(error);
+              window.alert(error);
+            });
+        }
+      }
+    });
+  </script>
+</body>
+</html>

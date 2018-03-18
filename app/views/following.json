@@ -1,0 +1,22 @@
+{% spaceless %}
+{% set fmt_dt = format_datetime %}
+{
+    "hasFollowing": {{ has_following ? 'true' : 'false' }},
+    "contents": [
+{% for content in main_contents %}
+        {
+            "title": "{{ content.title|replace({'"': '\"'}) }}",
+            "path": "{{ content.path }}",
+            "body": "{{ content.body|replace({'"': '\"'}) }}",
+            "date": "{{ content.date|date(fmt_dt) }}",
+            "update": "{{ content.update|date(fmt_dt) }}",
+            "tags": [
+{% for tag in content.tags %}
+                "{{ tag|replace({'"': '\"'}) }}"{% if not loop.last %},{% endif %}
+{% endfor %}
+            ]
+        }{% if not loop.last %},{% endif %}
+{% endfor %}
+    ]
+}
+{% endspaceless %}

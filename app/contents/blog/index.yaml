@@ -1,0 +1,6 @@
+---
+ExcludeFromList: yes
+Title: Blog entries
+Description: Blog entries
+Target: descendants
+TargetText: beginning

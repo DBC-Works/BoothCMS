@@ -1,0 +1,28 @@
+{% set fmt_iso8601 = 'Y-m-d\\TH:i:sP' %}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>{{ site_title }}</title>
+{% if content.category %}
+    <subtitle>{{ site_subtitle }}</subtitle>
+{% endif %}
+    <id>{{ site_rfc4151_id }}</id>
+    <link href="{{ site_url }}"/>
+    <link rel="self" href="{{ site_url }}/feed"/>
+    <updated>{{ update_time|date(fmt_iso8601) }}</updated>
+    <author>
+        <name>{{ author }}</name>
+    </author>
+{% for content in main_contents %}
+    <entry>
+        <title>{{ content.title }}</title>
+        <link href="{{ site_url }}{{ content.path }}"/>
+        <id>{{ site_rfc4151_id }}#{{ site_url|url_encode }}{{ content.path|url_encode }}</id>
+{% if content.category %}
+        <category scheme="http://xmlns.com/wordnet/1.6/" term="{{ content.category }}" />
+{% endif %}
+        <published>{{ content.date|date(fmt_iso8601) }}</published>
+        <updated>{{ content.update|date(fmt_iso8601) }}</updated>
+        <summary>{{ content.body }}</summary>
+    </entry>
+{% endfor %}
+</feed>

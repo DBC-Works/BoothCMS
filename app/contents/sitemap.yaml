@@ -1,0 +1,5 @@
+---
+ExcludeFromList: yes
+Template: sitemap.xml
+Target: all
+SupportTarget: unused

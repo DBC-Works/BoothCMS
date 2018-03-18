@@ -1,0 +1,4 @@
+---
+ExcludeFromList: yes
+Target: following
+Template: following.json

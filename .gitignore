@@ -1,0 +1,8 @@
+*.log
+*.diff
+*.out
+*.exp
+app/vendor/**
+tests/controllers/**/*.php
+tests/models/**/*.php
+tests/cache/**

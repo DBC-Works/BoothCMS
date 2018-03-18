@@ -1,0 +1,96 @@
+---
+Title: Content format
+DateAndTime: 2018-03-18T10:00:00
+Description: Content format of BoothCMS
+Category: Instruction
+Tags: Specification,Instruction
+...
+BoothCMS's content is a compound format of [YAML](http://yaml.org/)(headers) and [Markdown](https://learn.getgrav.org/content/markdown)(body). Headers are before three dots(`...`), body is after three dots. Extension of content file must set 'yaml' or 'yml'.
+
+```
+---
+Title: 'BoothCMS: a simple Flat file CMS'
+DateAndTime: 2018-03-18T23:59:59
+Description: BoothCMS is a simple Flat file CMS.
+Category: Software
+Tags: Summary
+..&#x2e;
+BoothCMS is a simple Flat file CMS.
+```
+
+#### Headers
+
+##### Author
+
+Author name of the content.
+
+##### Category
+
+Category of the content. You should select a value from [Wordnet for the Web](http://xmlns.com/wordnet/1.6/).
+
+##### Date
+
+Publich date. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+
+##### DateAndTime
+
+Publich date and time. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+
+##### Description
+
+Description of the content.
+
+##### ExcludeFromList
+
+If `yes`, the content can only be accessed directly.
+
+##### RepresenationImage
+
+Representation image path to use [Open Graph protocol](http://ogp.me/).
+
+##### Tags
+
+Tag collection of the content. Describe in CSV format.
+
+##### Target
+
+Target contents collection of the content insted of body.
+
+* recent-publish
+* recent-update
+* descendants
+* all
+* tagged-contents
+* following
+
+##### TargetText
+
+Target text of the content in collection.
+
+* beginning
+* description
+* body
+
+##### Template
+
+Template file name to translate.
+
+##### Title
+
+Title of the content.
+
+##### SupportTarget
+
+Support target of the content.
+
+* recent-publish
+* recent-update
+* descendants
+* all
+* unused
+
+#### Body
+
+If you omit `Target` header, you can write content body after three dots(...). You can mark up text with [MarkdownExtra](https://michelf.ca/projects/php-markdown/extra/).
+
+The only three dots line is invalid. If you want to write, replace character to "&amp;#x2e;".

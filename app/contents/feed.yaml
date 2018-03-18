@@ -1,0 +1,6 @@
+---
+ExcludeFromList: yes
+Template: atom.xml
+Target: recent-update
+TargetText: description
+SupportTarget: unused

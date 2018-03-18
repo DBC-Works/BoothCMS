@@ -1,0 +1,23 @@
+---
+Title: Flat file CMS 'BoothCMS' First preview release
+Date: 2018-03-18
+Description: BoothCMS first preview release
+Category: Announcement
+Tags: Release,Announcement,Blog
+...
+I published flat file CMS 'BoothCMS' first preview release on GitHub.
+
+https://github.com/DBC-Works/BoothCMS
+
+BoothCMS is under the strong influence of [Pico](http://picocms.org/)(especially early version). No administration function. To publish contents, you create it as files and copy to the web server. Features that are not in standard state Pico are as follows:
+
+* Template can be specified for each content
+* List display control function
+* Built-in Feed([Atom Syndication Format](https://tools.ietf.org/html/rfc4287)) and [Sitemaps](https://www.sitemaps.org/) generator
+* Server-side and client-side hybrid rendering
+
+On the other hand, there is no plug-in extension yet.
+
+Developing BoothCMS is like reinventing the wheel, but it's an act of realizing ideas. I hope someone will be of some help.
+
+BoothCMS is my first full-fledged PHP project. I think there are many bad points if check by PHP expert. I want to improve little by little.

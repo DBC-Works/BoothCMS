@@ -1,0 +1,108 @@
+---
+Title: Configuration
+DateAndTime: 2018-03-18T12:50:00
+Description: BoothCMS configuration
+Category: Instruction
+Tags: Install,Instruction
+...
+You can configure your site to edit `config.php` file. You must set site information(other configurations are optional).
+
+### Site information
+
+#### site_title
+
+Set site title.
+
+#### site_subtitle
+
+Set site subtitle or null. Mainly for Atom Syndication format.
+
+#### site_url
+
+Set site url.
+
+#### site_author
+
+Set name of site author.
+
+#### site_description
+
+Set site description.
+
+#### site_author_twitter
+
+Set Twitter account of site author.
+
+### Environment
+
+#### lang
+
+Set language string or null(to use system default).
+See [List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) to confirm specifiable strings.
+
+#### timezone
+
+Set timezone string or null(to use system default).
+See [List of Supported Timezones](http://php.net/manual/en/timezones.php) to confirm specifiable strings.
+
+### Rendering setting
+
+#### site_image_path
+
+Set default site representation image path(to use [Open Graph protocol](http://ogp.me/)).
+
+#### contents_per_page
+
+Set contents count pre page(default: 5).
+
+#### theme
+
+Set view theme directory name.
+
+#### default_template
+
+Set default template file name to translate.
+
+#### default_support_contents
+
+Set default support contents target. 
+
+* recent-publish
+* recent-update
+* descendants
+* all
+* unused
+
+#### excerpt_letter_limit_length
+
+Set excerpt letter limit length.
+
+#### format_datetime
+
+Set date and time format(see [Supported Date and Time Formats](http://php.net/manual/en/class.datetime.php)).
+
+#### site_rfc4151_id
+
+Set ['tag' URI Scheme(RFC 4151)](https://www.ietf.org/rfc/rfc4151.txt) style id. This value is used in Atom syndication format.
+
+#### sitemap_changefreq
+
+Set sitemap change frequency. See [&lt;changefreq&gt;](https://www.sitemaps.org/protocol.html#changefreqdef) of [Sitemaps XML format](https://www.sitemaps.org/protocol.html).
+
+* always
+* hourly
+* daily
+* weekly
+* monthly
+* yearly
+* never
+
+### Twig setting
+
+#### twig_enable_cache
+
+Set true to enable twig template translation result cache(need write permission to the cache directory).
+
+#### twig_enable_debug
+
+Set true to debug twig.

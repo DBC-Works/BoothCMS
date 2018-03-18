@@ -1,0 +1,35 @@
+---
+Title: Install
+DateAndTime: 2018-03-18T12:59:59
+Description: BoothCMS installation instruction
+Category: Instruction
+Tags: Install,Instruction
+...
+BoothCMS requires PHP v7.0 or later.
+
+* Microsoft Azure App Service Web Apps
+* Microsoft Internet Information Services(IIS)
+* Apache HTTP Server
+
+BoothCMS is available on GitHub.
+
+1. [Install composer](https://getcomposer.org/doc/00-intro.md).
+2. Clone from GitHub to a directory of Web Server and set `app` directory to publish.
+3. Run `composer install` to install libraries.
+4. Edit `config.php` to configure site. -> [Configuration](/doc/config)
+5. Add content. -> [Content format](/doc/content)
+6. Edit view template. -> [Template](/doc/template)
+
+### Directory structure
+
+* app - application root
+    * cache - cache diectory(need write permission)
+    * contents - contents placement(You can create subdirectory)
+    * controllers - application controllers
+    * models - content models
+    * views - view templates
+        * themes - theme directory
+            * default - default theme
+* tests - test files
+    * controllers - contoller tests
+    * models - model tests

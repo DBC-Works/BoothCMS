@@ -1,0 +1,69 @@
+<?php
+/*
+ * BoothCMS configuration
+ */
+
+//
+// Site information
+//
+// Site title
+$config['site_title'] = 'BoothCMS';
+// Site subtitle(mainly for Atom Syndication format)
+$config['site_subtitle'] = null;
+// Site url
+$config['site_url'] = 'http://example.com';
+// Site author
+$config['site_author'] = 'D.B.C.';
+// Site description
+$config['site_description'] = 'BoothCMS is a simple Flat file CMS.';
+// Site author twitter account
+$config['site_author_twitter'] = '@example';
+
+//
+// Environment
+//
+
+// Site language(ISO-639-1 language code or null(use system default))
+$config['lang'] = null;
+// Timezone(if null, use system default))
+// http://php.net/manual/en/timezones.php
+$config['timezone'] = 'UTC';
+
+//
+// Rendering setting
+//
+
+// Default site representation image path(to use [Open Graph protocol](http://ogp.me/)).
+$config['site_image_path'] = null;
+// Contents count per page
+$config['contents_per_page'] = 5;
+// View theme
+$config['theme'] = 'default';
+// default template file name
+$config['default_template'] = 'index.html';
+// default support contents type(recent-update / ...)
+$config['default_support_contents'] = 'recent-update';
+
+// Excerpt limit length(in letters)
+$config['excerpt_letter_limit_length'] = 300;
+// Date and time format
+// http://php.net/manual/en/class.datetime.php
+$config['format_datetime'] = DateTime::ATOM;
+
+//
+// Site metadata
+//
+
+// The 'tag' URI Scheme(RFC 4151) style id(for Atom syndication format)
+// https://www.ietf.org/rfc/rfc4151.txt
+$config['site_rfc4151_id'] = 'tag:example@example.com,2018-01-01:BoothCMS';
+// Sitemap change frequency
+// https://www.sitemaps.org/protocol.html#changefreqdef
+$config['sitemap_changefreq'] = 'monthly';
+
+//
+// Twig settings
+//
+$config['twig_enable_cache'] = false;
+$config['twig_enable_debug'] = false;
+?>

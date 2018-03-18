@@ -1,0 +1,51 @@
+---
+# Content title(required)
+Title: 'BoothCMS: a simple Flat file CMS'
+# Content author(optional)
+#Author: Sad Juno
+# Date(optional; ISO 8601)
+## Date: 2999-12-31
+# Date and time(optional; ISO 8601)
+DateAndTime: 2018-03-18T23:59:59
+# representation image to use OGP(optional)
+#RepresentationImage: /image.jpg
+# Content description(optional)
+Description: BoothCMS is a simple Flat file CMS.
+# Category(optional; please select value from Wordnet Vocabulary(http://xmlns.com/2001/08/wordnet/))
+Category: Software
+# Tag(optional; format is CSV)
+Tags: Summary
+...
+BoothCMS is a simple Flat file CMS.
+
+### Features
+
+* No database
+* No administration function - you create contents as files and copy to the web server
+* Content format is a composite of [YAML](http://yaml.org/)(headers) and [Markdown](https://learn.getgrav.org/content/markdown)(body)
+* Template can be specified for each content
+* List display control function
+* Built-in feed([Atom Syndication Format](https://tools.ietf.org/html/rfc4287)) and [Sitemaps](https://www.sitemaps.org/) generator
+* Server-side and client-side hybrid rendering
+
+### Table of Contents
+
+* Document
+    * [Install](/doc/install)
+    * [Configuration](/doc/config)
+    * [Template](/doc/template)
+    * [Content format](/doc/content)
+* [LICENSE](/LICENSE) - BoothCMS is licensed under [MIT license](https://opensource.org/licenses/mit-license.php)
+* [CHANGELOG](/CHANGELOG)
+
+### Using libraries
+
+BoothCMS uses these libraries(and dependent libraries).
+
+* [spyc](https://github.com/mustangostang/spyc)
+* [cebe/markdown](cebe/markdown)
+* [Twig](https://twig.symfony.com/)
+* [Vue.js](https://vuejs.org/)
+* [lit](https://ajusa.github.io/lit/docs/lit.html)
+
+Thank you for these useful libraries.
