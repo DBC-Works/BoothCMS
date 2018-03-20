@@ -7,7 +7,7 @@
         {
             "title": "{{ content.title|replace({'"': '\"'}) }}",
             "path": "{{ content.path }}",
-            "body": "{{ content.body|replace({'"': '\"'}) }}",
+            "body": "{{ content.body|replace({'"': '\\"', "\n": "\\n", "\r": "\\r"}) }}",
             "date": "{{ content.date|date(fmt_dt) }}",
             "update": "{{ content.update|date(fmt_dt) }}",
             "tags": [

@@ -115,22 +115,22 @@
               <div v-html="additionalContent.body"></div>
 {% if as_list %}
               <div>
-                (<a v-bind:href="'{{ site_url }}' + additionalContent.path">View content</a>)
+                (<a v-bind:href="siteUrl + additionalContent.path">View content</a>)
               </div>
 {% endif %}
-{% verbatim %}
               <div v-if="0 &lt; additionalContent.tags.length">
-                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="'{{ site_url }}/tags/' + tag">#{{ tag }}</a>
+                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="siteUrl + '/tags/' + tag">#{{ '{{' }}  tag {{ '}}' }} </a>
                     <template v-if="index &lt; additionalContent.tags.length - 1"> </template>
                   </span>
               </div>
+{% verbatim %}
               <div>Publish: <time>{{ additionalContent.date }}</time> / Update: <time>{{ additionalContent.update }}</time></div>
+{% endverbatim %}
             </article>
           </div><!-- .card -->
           <div class="moreButtonStyle" v-bind:style="moreButtonStyle" v-if="moreButtonVisible">
             <button class="btn" v-on:click="onClickMore">More...</button>
           </div>
-{% endverbatim %}
 {% endif %}{# has_following #}
         </section>
 {% endif %}
@@ -168,6 +168,7 @@
     var vm = new Vue({
       el: '#app',
       data: {
+        siteUrl: '{{ site_url }}',
         additionalContentStyle: {
           display: 'none'
         },
@@ -180,6 +181,8 @@
       },
       mounted: function() {
         this.additionalContentStyle.display = this.moreButtonStyle.display = 'block';
+        this.siteUrl = this.siteUrl.replace().replace('http://example.com', window.location.origin);
+
         var links = document.getElementsByTagName('link');
         for (var index = 0; index !== links.length; ++index) {
           this.correctHostname(links[index], 'href');
@@ -194,9 +197,9 @@
           element.setAttribute(attrName, element.getAttribute(attrName).replace('http://example.com', window.location.origin));
         },
         onClickMore: function(e) {
-          var url = '{{ site_url }}/following/' + this.nextPageIndex + '{{path}}';
+          var url = this.siteUrl + '/following/' + this.nextPageIndex + '{{path}}';
           var self = this;
-          axios.get(url.replace('http://example.com', window.location.origin))
+          axios.get(url)
             .then(function (response) {
               self.moreButtonVisible = response.data.hasFollowing;
               self.additionalContents = self.additionalContents.concat(response.data.contents);
