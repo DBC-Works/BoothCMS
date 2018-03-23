@@ -17,11 +17,12 @@ BoothCMS is available on GitHub.
 2. Clone from GitHub to a directory of Web Server and set `app` directory to publish.
 3. Edit some files.
     * delete `delete.me` files.
+    * edit `robots.txt` file to correct pathes.
     * if web server is Apache, delete `Web.config` file.
     * if web server is Microsoft Internet Information Service, delete `.htaccess` file.
     * if web server is Microsoft Azure App Services Web App, delete `configSections` element in `Web.config` file and delete `.htaccess` file.
 4. Run `composer install` to install libraries.
-4. Edit `config.php` to configure site. -> [Configuration](/doc/config)
+4. Edit `config.php` file to configure site. -> [Configuration](/doc/config)
 6. Add content. -> [Content format](/doc/content)
 7. Edit view template. -> [Template](/doc/template)
 

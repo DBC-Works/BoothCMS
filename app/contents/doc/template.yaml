@@ -8,3 +8,5 @@ Tags: Install,Instruction
 To translate contens to html, BoothCMS uses [Twig](https://twig.symfony.com/)(server side) and [Vue.js](https://vuejs.org/index.html)(client side). Initial rendering is server side, additional rendering is client side.
 
 If you want to change the template drastically, create child directroy inr `views` and set the directory name to `theme` config value.
+
+Default template uses [lit](https://ajusa.github.io/lit/docs/lit.html) CSS framework.

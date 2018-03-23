@@ -23,6 +23,25 @@ $html_string = $controller->render('/tags/Log');
 $html = new SimpleXMLElement($html_string);
 echo 'title: ' . $html->head->title . "\n";
 
+foreach ($html->xpath('//a') as $anchor) {
+    foreach($anchor->attributes() as $name => $value) {
+        if ($name === 'href') {
+            if ((mb_strpos($value, 'http') === 0) === false) {
+                throw new Exception('Invalid href: ' . $value);
+            }
+        }
+    }
+}
+foreach ($html->xpath('//link') as $link) {
+    foreach($link->attributes() as $name => $value) {
+        if ($name === 'href') {
+            if ((mb_strpos($value, 'http') === 0) === false) {
+                throw new Exception('Invalid href: ' . $value);
+            }
+        }
+    }
+}
+
 ?>
 --EXPECT--
 - Tag set
