@@ -50,7 +50,7 @@ Representation image path to use [Open Graph protocol](http://ogp.me/).
 
 ##### Tags
 
-Tag collection of the content. Describe in CSV format.
+Tag collection of the content. Describe in CSV or [YAML sequence](http://www.yaml.org/spec/1.2/spec.html#id2797382).
 
 ##### Target
 
