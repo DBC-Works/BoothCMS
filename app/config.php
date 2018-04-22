@@ -23,6 +23,8 @@ $config['site_author_twitter'] = '@example';
 // Environment
 //
 
+$config['in_test'] = false;
+
 // Site language(ISO-639-1 language code or null(use system default))
 $config['lang'] = null;
 // Timezone(if null, use system default))

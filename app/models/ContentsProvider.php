@@ -209,6 +209,17 @@ class ContentsProvider {
     }
 
     /**
+     * Has tag?
+     * 
+     * @param string $tag tag name
+     * @return bool
+     */
+    public function hasTag(string $tag): bool {
+        assert($tag !== '');
+        return array_key_exists($tag, $this->getTagSet());
+    }
+
+    /**
      * Get tagged contents
      * 
      * @param string $tag specified tag

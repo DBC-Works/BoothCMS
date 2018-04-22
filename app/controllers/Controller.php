@@ -1,15 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../models/ContentsProvider.php';
-
-/**
- * Subset arg
- */
-class SubsetArg {
-    public $path;
-    public $params;
-    public $page_index = 0;
-}
+require_once __DIR__ . '/ContentsTaker.php';
 
 /**
  * Subset info
@@ -24,12 +16,52 @@ class SubsetInfo {
  * Controller
  */
 class Controller {
+    /*
+     * Get target content
+     * 
+     * @param ContentsProvider $provider contents provider
+     * @param string $path path
+     * @param array& $params parameters
+     */
+    public static function getContent(ContentsProvider $provider, string $path, array& $params) {
+        $content_path = $path;
+
+        while ($provider->hasContent($content_path) === false) {
+            $separator = mb_strrpos($content_path, '/');
+            if ($separator === false || $separator < 1) {
+                break;
+            }
+            $param = mb_substr($content_path, $separator + 1);
+            array_unshift($params, $param);
+            $content_path = mb_substr($content_path, 0, $separator);
+        }
+
+        if ($provider->hasContent($content_path) === false) {
+            $last_char_pos = mb_strlen($path) - 1;
+            if ($path[$last_char_pos] === '/') {
+                if (0 < $last_char_pos) {
+                    $content_path = mb_substr($path, 0, $last_char_pos);
+                }
+                if ($provider->hasContent($content_path) === false) {
+                    $content_path = $path . 'index';
+                }
+            }
+            else {
+                $content_path = $path . '/index';
+            }
+        }
+
+        return $provider->hasContent($content_path)
+                ? $provider->getContent($content_path)
+                : null;
+    }
+
     private $provider;
     private $config;
     private $env;
 
     private $twig_vars;
-    private $target_operator;
+    private $takers;
 
     /**
      * Constructor
@@ -44,56 +76,6 @@ class Controller {
         $this->env = $env;
 
         $this->twig_vars = null;
-        $this->target_operator = array(
-            'recent-publish' => function(SubsetArg $args, string& $set_var_name, string& $target_text) {
-                return $this->provider->getRecentPublishContents($this->getContentCountPerPage(), $args->page_index);
-            },
-            'recent-update' => function(SubsetArg $args, string& $set_var_name, string& $target_text) {
-                return $this->provider->getRecentUpdateContents($this->getContentCountPerPage(), $args->page_index);
-            },
-            'descendants' => function(SubsetArg $args, string& $set_var_name, string& $target_text) {
-                return $this->provider->getDescendantContentsOf($args->path, $this->getContentCountPerPage(), $args->page_index);
-            },
-            'tagged-contents' => function(SubsetArg $args, string& $set_var_name, string& $target_text) {
-                if (0 < count($args->params)) {
-                    $this->twig_vars['title'] = $this->twig_vars['title'] . ': ' . $args->params[0];
-                    return $this->provider->getTaggedContents($args->params[0], $this->getContentCountPerPage(), $args->page_index);
-                }
-                else {
-                    $set_var_name = 'tag_set';
-                    return $this->provider->getTagSet();
-                }
-            },
-            'following' => function(SubsetArg $args, string& $set_var_name, string& $target_text) {
-                $following_args = new SubsetArg();
-                $following_args->page_index = intval(array_shift($args->params));
-                $following_args->path = '/' . implode('/', $args->params);
-                $following_args->params = array();
-
-                $following_content = $this->getContent($following_args->path, $following_args->params);
-                if (is_null($following_content) !== false) {
-                    throw new Exception('Unknown following content: ' . $following_args->path);
-                }
-                $target_type = $following_content->target->content->getTarget();
-                if ($target_type === 'following') {
-                    throw new Exception('Recursive following');
-                }
-                if (array_key_exists($target_type, $this->target_operator) === false) {
-                    throw new Exception('Unknown target: ' . $target_type);
-                }
-                if ($following_content->target->content->hasTargetText()) {
-                    $target_text = $following_content->target->content->getTargetText();
-                }
-                $dummy_set_var_name = 'main_contents';
-                $dummy_target_text = '';
-                return $this->target_operator[$target_type]($following_args, $dummy_set_var_name, $dummy_target_text);
-            },
-            'all' => function(SubsetArg $args, string& $set_var_name, string& $target_text) {
-                $part = new PartOfContent();
-                $part->part = $this->provider->getListUpContents();
-                return $part;
-            }
-        );
     }
 
     /**
@@ -108,26 +90,39 @@ class Controller {
         if (is_null($this->config['timezone']) === false) {
             date_default_timezone_set($this->config['timezone']);
         }
+        $this->takers = ContentsTaker::getTakers($this->provider, $this->getContentCountPerPage());
+        $this->twig_vars = $this->createBasicTwigArgs($path);
 
         $params = array();
-        $info = $this->getContent($path, $params);
+        $info = Controller::getContent($this->provider, $path, $params);
 
+        $target_contents = '';
+        $taker = null;
         $content_path = $path;
         if (is_null($info) === false) {
             $content_path = $info->target->path;
+            if ($info->target->content->hasTarget()) {
+                $target_contents = $info->target->content->getTarget();
+                if (array_key_exists($target_contents, $this->takers) === false) {
+                    throw new Exception('Unknown target: ' . $target_contents);
+                }
+                $taker = $this->takers[$target_contents];
+                if ($taker->isValidParam($params) === false) {
+                    $info = null;
+                    $target_contents = '';
+                }
+            }
         }
-        else {
+        if (is_null($info) !== false) {
             $info = $this->provider->getContent('/404');
-            if ($_SERVER) {
+            if ($this->config['in_test'] === false && $_SERVER) {
                 header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
             }
         }
 
-        $this->twig_vars = $this->createBasicTwigArgs($path);
-
         $this->twig_vars['author'] = $info->target->content->hasAuthor()
-                            ? $info->target->content->getAuthor()
-                            : $this->config['site_author'];
+                                    ? $info->target->content->getAuthor()
+                                    : $this->config['site_author'];
         if ($info->target->content->hasTitle()) {
             $this->twig_vars['title'] = $info->target->content->getTitle($this->getLang());
         }
@@ -140,12 +135,10 @@ class Controller {
             $this->twig_vars['description'] = $this->config['site_description'];
         }
 
-        $target_contents = '';
         $target_to_set = '';
-        $this->twig_vars['as_list'] = $info->target->content->hasTarget();
+        $this->twig_vars['as_list'] = ($target_contents !== '');
         if ($this->twig_vars['as_list']) {
-            $target_contents = $info->target->content->getTarget();
-            $subset_info = $this->getContentsSubset($content_path, $target_contents, $params);
+            $subset_info = $this->getContentsSubset($content_path, $taker, $params);
             $target_to_set = $subset_info->type;
             $this->setSubsetInfoToTwigVars($subset_info, $target_text);
         }
@@ -168,45 +161,6 @@ class Controller {
      */
     private function getContentCountPerPage(): int {
         return intval($this->config['contents_per_page'] ?? 5);
-    }
-
-    /*
-     * Get target content
-     * 
-     * @param string $path path
-     * @param array& $params paraneters
-     */
-    private function getContent(string $path, array &$params) {
-        $content_path = $path;
-
-        while ($this->provider->hasContent($content_path) === false) {
-            $separator = mb_strrpos($content_path, '/');
-            if ($separator === false || $separator < 1) {
-                break;
-            }
-            $param = mb_substr($content_path, $separator + 1);
-            array_unshift($params, $param);
-            $content_path = mb_substr($content_path, 0, $separator);
-        }
-
-        if ($this->provider->hasContent($content_path) === false) {
-            $last_char_pos = mb_strlen($path) - 1;
-            if ($path[$last_char_pos] === '/') {
-                if (0 < $last_char_pos) {
-                    $content_path = mb_substr($path, 0, $last_char_pos);
-                }
-                if ($this->provider->hasContent($content_path) === false) {
-                    $content_path = $path . 'index';
-                }
-            }
-            else {
-                $content_path = $path . '/index';
-            }
-        }
-
-        return $this->provider->hasContent($content_path)
-                ? $this->provider->getContent($content_path)
-                : null;
     }
 
     /*
@@ -287,28 +241,21 @@ class Controller {
      * Get contents subsets
      * 
      * @param string $path target path
-     * @param string $target_type target subset type
+     * @param ContentsTaker $taker contents taker
      * @param array|null $params parameters
      * @return SubsetInfo
      */
-    private function getContentsSubset(string $path, string $target_type, $params): SubsetInfo {
+    private function getContentsSubset(string $path, ContentsTaker $taker, array $params = null): SubsetInfo {
         assert($path !== '');
-        assert($target_type !== '');
 
-        if (array_key_exists($target_type, $this->target_operator) === false) {
-            throw new Exception('Unknown target: ' . $target_type);
-        }
-
-        $args = new SubsetArg();
-        $args->path = $path;
-        $args->params = $params;
         $set_var_name = 'main_contents';
         $target_text = '';
-        $subset = $this->target_operator[$target_type]($args, $set_var_name, $target_text);
-
         $info = new SubsetInfo();
+        $info->subset = $taker->take($taker->createTakeArgs($path, $params, 0),
+                                     $set_var_name,
+                                     $target_text,
+                                     $this->twig_vars);
         $info->type = $set_var_name;
-        $info->subset = $subset;
         $info->target_text = $target_text;
         return $info;
     }
@@ -402,7 +349,7 @@ class Controller {
         }
         else {
             $dummy_target_text = '';
-            $support_info = $this->getContentsSubset($content_path, $support_target, null, $dummy_target_text);
+            $support_info = $this->getContentsSubset($content_path, $this->takers[$support_target], null, $dummy_target_text);
             if ($support_info->type !== 'main_contents') {
                 throw new Exception('Not usable for support content var name: ' . $support_info->type);
             }

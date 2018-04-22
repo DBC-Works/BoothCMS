@@ -8,6 +8,7 @@ require_once __DIR__ . '/../app/config.php';
 /*
  * Environment
  */
+$config['in_test'] = true;
 $config['lang'] = 'en';
 $config['timezone'] = 'UTC';
 

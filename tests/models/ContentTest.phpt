@@ -61,7 +61,7 @@ Can list up: yes
 Has template: no
 Title: BoothCMS: a simple Flat file CMS
 Has author: no
-Date and time: 2018-03-18T23:59:59
+Date and time: 2999-12-31T23:59:59
 Category: Software
 Has body: yes
 Beginning of body: 
@@ -73,7 +73,7 @@ Can list up: yes
 Has template: no
 Title: CHANGELOG
 Author: D.B.C.
-Date and time: 2018-03-18T00:00:00
+Date and time: 2018-03-31T00:00:00
 Category: Software
 Has target text: no
 Has body: yes

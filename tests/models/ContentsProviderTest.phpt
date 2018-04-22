@@ -43,7 +43,7 @@ echo 'Has prev: ' . (is_null($content->prev) ? 'no' : 'yes') . "\n";
 ?>
 --EXPECT--
 404 is not in list: yes
-Content count: 8
+Content count: 10
 Latest content title: BoothCMS: a simple Flat file CMS
 
 Has feed: yes
@@ -59,14 +59,14 @@ Valid recent update content count: 5
 - Tag set
 Tag count: 9
 Instruction: 4(4)
+Release: 3(3)
+Announcement: 3(3)
+Blog: 3(3)
 Install: 3(3)
 Summary: 1(1)
+Log: 1(1)
 Specification: 1(1)
 License: 1(1)
-Log: 1(1)
-Release: 1(1)
-Announcement: 1(1)
-Blog: 1(1)
 
 - index(yaml style header content)
 Title: BoothCMS: a simple Flat file CMS

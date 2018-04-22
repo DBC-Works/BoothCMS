@@ -1,5 +1,5 @@
 --TEST--
-Index rendering test
+Tag rendering test
 --FILE--
 <?php
 require_once __DIR__ . '/../testEnv.php';
@@ -42,6 +42,12 @@ foreach ($html->xpath('//link') as $link) {
     }
 }
 
+echo "\n- Not exist\n";
+$html_string = $controller->render('/tags/404');
+//echo $html_string;
+$html = new SimpleXMLElement($html_string);
+echo 'title: ' . $html->head->title . "\n";
+
 ?>
 --EXPECT--
 - Tag set
@@ -49,3 +55,6 @@ title: Tag - BoothCMS
 
 - Tag(LOG)
 title: Tag: Log - BoothCMS
+
+- Not exist
+title: Not Found(404) - BoothCMS

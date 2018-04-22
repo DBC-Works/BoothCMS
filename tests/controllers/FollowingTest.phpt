@@ -15,9 +15,21 @@ $json_string = $controller->render('/following/1/doc/');
 //echo $json_string . "\n";
 $json = json_decode($json_string);
 //echo json_encode($json) . "\n";
+echo "- Valid parameter\n";
 echo 'Has following: ' . ($json->hasFollowing ? 'yes' : 'no') . "\n";
 echo 'Following count: ' . count($json->contents) . "\n";
+
+echo "\n- No parameter\n";
+$html_string = $controller->render('/following');
+//echo $html_string . "\n";
+$html = new SimpleXMLElement($html_string);
+echo 'title: ' . $html->head->title . "\n";
+
 ?>
 --EXPECT--
+- Valid parameter
 Has following: no
 Following count: 2
+
+- No parameter
+title: Not Found(404) - BoothCMS
