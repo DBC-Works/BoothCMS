@@ -367,7 +367,7 @@ class Controller {
         if (is_null($image_url) !== false || $image_url === '') {
             $image_url = $this->config['site_image_path'];
         }
-        if (mb_ereg_match('^https?:', $image_url) === FALSE) {
+        if (is_null($image_url) === false && mb_ereg_match('^https?:', $image_url) === false) {
             $image_url = $this->config['site_url'] . $image_url;
         }
         return $image_url;
