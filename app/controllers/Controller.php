@@ -358,6 +358,22 @@ class Controller {
     }
 
     /**
+     * Get representation image url
+     * 
+     * @param TargetContainer $info content information
+     */
+    private function getRepresentationImageUrl(TargetContainer $info) {
+        $image_url = $info->target->content->getRepresentationImageSource();
+        if (is_null($image_url) !== false || $image_url === '') {
+            $image_url = $this->config['site_image_path'];
+        }
+        if (mb_ereg_match('^https?:', $image_url) === FALSE) {
+            $image_url = $this->config['site_url'] . $image_url;
+        }
+        return $image_url;
+    }
+
+    /**
      * Set single content info to Twig vars
      * 
      * @param string $content_path content path
@@ -388,10 +404,7 @@ class Controller {
         $this->twig_vars['main_contents'] = array(
             $translated
         );
-        $image_path = $info->target->content->getRepresentationImage();
-        $this->twig_vars['image_path'] = (is_null($image_path) === false && $image_path !== '')
-                                        ? $image_path
-                                        : $this->config['site_image_path'];
+        $this->twig_vars['image_url'] = $this->getRepresentationImageUrl($info);
     }
 
     /**

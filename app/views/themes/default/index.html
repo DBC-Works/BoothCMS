@@ -27,8 +27,8 @@
 {% endif %}
   <meta property="og:type" content="article" />
   <meta property="og:url" content="{{ site_url }}/{{ path }}" />
-{% if image_path %}
-  <meta property="og:image" content="{{ site_url }}/{{ image_path }}" />
+{% if image_url %}
+  <meta property="og:image" content="{{ image_url }}" />
 {% endif %}
 {% if description %}
   <meta property="og:description" content="{{ description|e }}" />

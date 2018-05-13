@@ -371,7 +371,7 @@ class Content {
      * 
      * @return string|null
      */
-    public function getRepresentationImage() {
+    public function getRepresentationImageSource() {
         if ($this->hasHeader('RepresentationImage')) {
             return $this->getValueOf('RepresentationImage', true);
         }

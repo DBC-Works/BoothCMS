@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+Version 0.1.3(2018-05-13)
+-------------------------
+
+Update OGP image source processing(#6).
+
 Version 0.1.2(2018-04-23)
 -------------------------
 

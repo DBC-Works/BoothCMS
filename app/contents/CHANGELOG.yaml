@@ -7,6 +7,10 @@ Category: Software
 Tags: Log
 */
 
+### Version 0.1.3(2018-05-13)
+
+Update OGP image source processing([#6](https://github.com/DBC-Works/BoothCMS/issues/6)).
+
 ### Version 0.1.2(2018-04-23)
 
 Improve path parameter check process([#4](https://github.com/DBC-Works/BoothCMS/issues/4)).

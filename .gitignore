@@ -2,6 +2,7 @@
 *.diff
 *.out
 *.exp
+.vscode/**
 app/vendor/**
 tests/controllers/**/*.php
 tests/models/**/*.php

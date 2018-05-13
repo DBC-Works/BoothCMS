@@ -1,0 +1,7 @@
+---
+Title: Content for unit test - Representation image specification in body(absolute URL).
+Date: 2018-05-13
+Tags: 
+  - Test content
+...
+<img src="https://i.ytimg.com/vi/uacjJ4_dwrE/sddefault.jpg" />
