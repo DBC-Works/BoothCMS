@@ -11,9 +11,11 @@ echo '404 is not in list: ' . (array_key_exists('/404', $listUpContents) !== fal
 $listUpContentsCount = count($listUpContents);
 echo 'Content count: ' . count($listUpContents) . "\n";
 $latestContent = current($listUpContents);
-echo "Latest content title: " . $latestContent->getTitle() . "\n\n";
+echo "Latest content title: " . $latestContent->getTitle();
+echo "\nValid latest content date and time: " . ($latestContent->getDateAndTime() == $provider->getLatestContentDateAndTime() ? 'yes' : 'no');
+echo "\nValid oldest content date and time: " . (end($listUpContents)->getDateAndTime() == $provider->getOldestContentDateAndTime() ? 'yes' : 'no');
 
-echo 'Has feed: ' . ($provider->hasContent('/feed') ? 'yes' : 'no'). "\n";
+echo "\n\nHas feed: " . ($provider->hasContent('/feed') ? 'yes' : 'no'). "\n";
 echo 'feed is not in list: ' . (array_key_exists('/feed', $listUpContents) !== false ? 'no' : 'yes') . "\n";
 $info = $provider->getContent('/feed');
 echo 'Valid feed: ' . (is_null($info) === false && is_null($info->target) === false ? 'yes' : 'no') . "\n";
@@ -45,6 +47,8 @@ echo 'Has prev: ' . (is_null($content->prev) ? 'no' : 'yes') . "\n";
 404 is not in list: yes
 Content count: 13
 Latest content title: BoothCMS: a simple Flat file CMS
+Valid latest content date and time: yes
+Valid oldest content date and time: yes
 
 Has feed: yes
 feed is not in list: yes

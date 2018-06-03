@@ -12,3 +12,41 @@ To translate contens to html, BoothCMS uses [Twig](https://twig.symfony.com/)(se
 If you want to change the template drastically, create child directroy inr `views` and set the directory name to `theme` config value.
 
 Default template uses [lit](https://ajusa.github.io/lit/docs/lit.html) CSS framework.
+
+#### Template variables
+
+* site_title
+* site_subtitle
+* site_url
+* site_rfc4151_id
+* site_author_twitter
+* format_datetime
+* sitemap_changefreq
+* path
+* author
+* title
+* description
+* image_path
+* tags
+* as_list
+* main_contents(array(content or tag strings))
+* support_contents(array(content or tag strings))
+* has_following
+
+##### Content properties
+
+* create_time
+* update_time
+* path
+* title
+* date
+* update
+* tags
+* category
+* body
+* prev
+    * path
+    * title
+* next
+    * path
+    * title

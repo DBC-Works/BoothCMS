@@ -43,11 +43,11 @@ class ContentsProvider {
      * @return array
      */
     private static function load(string $contents_dir_path, string $child_path): array {
-        assert(file_exists($content_dir_path) && is_dir($content_dir_path));
+        assert(file_exists($contents_dir_path) && is_dir($contents_dir_path));
 
         $contents = array();
 
-        $dir_path = $contents_dir_path . '/' . $child_path;
+        $dir_path = $contents_dir_path . $child_path;
         foreach (scandir($dir_path) as $entry) {
             $entry_path = $dir_path . '/' . $entry;
             if (is_dir($entry_path)) {
@@ -123,6 +123,26 @@ class ContentsProvider {
         return array_filter($this->contents, function($content) {
             return $content->canListUp();
         });
+    }
+
+    /**
+     * Get latest content date and time
+     *
+     * @return DateTime
+     */
+    public function getLatestContentDateAndTime(): DateTime {
+        $listUpContents = $this->getListUpContents();
+        return current($listUpContents)->getDateAndTime();
+    }
+
+    /**
+     * Get oldest content date and time
+     *
+     * @return DateTime
+     */
+    public function getOldestContentDateAndTime(): DateTime {
+        $listUpContents = $this->getListUpContents();
+        return end($listUpContents)->getDateAndTime();
     }
 
     /**

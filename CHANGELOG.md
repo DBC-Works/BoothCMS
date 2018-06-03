@@ -1,10 +1,11 @@
 CHANGELOG
 =========
 
-Version 0.1.3(2018-05-13)
+Version 0.1.3(2018-06-03)
 -------------------------
 
-Update OGP image source processing(#6).
+* Update OGP image source processing(#6)
+* Add new template variables 'latest_content_date_and_time' and 'oldest_content_date_and_time'(#7)
 
 Version 0.1.2(2018-04-23)
 -------------------------

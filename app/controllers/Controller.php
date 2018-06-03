@@ -92,6 +92,8 @@ class Controller {
         }
         $this->takers = ContentsTaker::getTakers($this->provider, $this->getContentCountPerPage());
         $this->twig_vars = $this->createBasicTwigArgs($path);
+        $this->twig_vars['latest_content_date_and_time'] = $this->provider->getLatestContentDateAndTime();
+        $this->twig_vars['oldest_content_date_and_time'] = $this->provider->getOldestContentDateAndTime();
 
         $params = array();
         $info = Controller::getContent($this->provider, $path, $params);

@@ -1,0 +1,15 @@
+{% set fmt_iso8601_date = 'Y-m-d' %}
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html {% if lang %}lang="{{ lang }}" xml:lang="{{ lang }}" {% endif %}>
+<head>
+<title>Template variables</title>
+</head>
+<body>
+<h1>Template variables</h1>
+<ul>
+    <li>Latest content date and time: {{ latest_content_date_and_time|date(fmt_iso8601_date) }}</li>
+    <li>Oldest content date and time: {{ oldest_content_date_and_time|date(fmt_iso8601_date) }}</li>
+</ul>
+</body>
+</html>
