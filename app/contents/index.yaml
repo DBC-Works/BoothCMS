@@ -44,9 +44,10 @@ BoothCMS is a simple Flat file CMS.
 BoothCMS uses these libraries(and dependent libraries).
 
 * [spyc](https://github.com/mustangostang/spyc)
-* [cebe/markdown](http://markdown.cebe.cc/)
+* [Parsedown](http://parsedown.org/)
 * [Twig](https://twig.symfony.com/)
 * [Vue.js](https://vuejs.org/)
+* [axios](https://github.com/axios/axios)
 * [lit](https://ajusa.github.io/lit/docs/lit.html)
 
 Thank you for these useful libraries.

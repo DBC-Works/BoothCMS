@@ -148,7 +148,7 @@ class Controller {
             $this->setSingleContentInfoToTwigVars($content_path, $target_text, $info);
         }
 
-        $this->setSupportContentsToTwigVars($content_path, $target_contents, $target_text, $info);
+        $this->setSupportContentsToTwigVars($content_path, $target_contents, $target_to_set, $target_text, $info);
 
         $template_name = $info->target->content->hasTemplate()
                         ? $info->target->content->getTemplate()
@@ -332,10 +332,11 @@ class Controller {
      * 
      * @param string $content_path content path
      * @param string $target_contents target contents
+     * @param string $target_to_set main target
      * @param string $target_text target text
      * @param TargetContainer $info content information to set
      */
-    private function setSupportContentsToTwigVars(string $content_path, string $target_contents, string $target_text, TargetContainer $info) {
+    private function setSupportContentsToTwigVars(string $content_path, string $target_contents, string $target_to_set, string $target_text, TargetContainer $info) {
         assert($content_path !== '');
         assert($target_text !== '');
 

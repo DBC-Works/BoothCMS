@@ -1,0 +1,37 @@
+---
+Title: Version 0.1.4 release
+Date: 2018-06-16
+Description: BoothCMS Version 0.1.4 released.
+Category: Announcement
+Tags: Release,Announcement,Blog
+...
+I publish 'BoothCMS' version 0.1.4. It contains these updates:
+
+* Change markdown parser from [cebe/markdown](http://markdown.cebe.cc/) to [Parsedown](http://parsedown.org/)([#8](https://github.com/DBC-Works/BoothCMS/issues/8))
+* Fix some bugs and update some documents
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)
+
+Please run `composer update` if you update existing site.
+
+### Reason to change markdown parser
+
+Because cebe/markdown 1.2.1 fails to parse html fragment contains xml style empty element like this:
+
+```
+<div class="center youtube-container">
+<iframe>
+<img src="https://i.ytimg.com/vi/uacjJ4_dwrE/sddefault.jpg" alt="Rise to" />
+</iframe>
+</div>
+```
+
+Result contains invalid p element like this:
+
+```
+<div class="center youtube-container">
+<iframe>
+<img src="https://i.ytimg.com/vi/uacjJ4_dwrE/sddefault.jpg" alt="Rise to" />
+<p></iframe>
+</div></p>
+```

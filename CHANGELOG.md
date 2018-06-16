@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Version 0.1.4(2018-06-16)
+-------------------------
+
+* Change markdown parser from [cebe/markdown](http://markdown.cebe.cc/) to [Parsedown](http://parsedown.org/)(#8)
+* Fix some bugs and update some documents
+
 Version 0.1.3(2018-06-03)
 -------------------------
 

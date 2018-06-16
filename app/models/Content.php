@@ -379,14 +379,12 @@ class Content {
         $xml_string = 0 < count($this->translatedBody)
                     ? current($this->translatedBody)
                     : $this->getTranslatedBody(null);
-        $xml = new SimpleXMLElement('<div>' . $xml_string . '</div>');
         $images = array();
-        foreach ($xml->xpath('//img') as $img) {
-            foreach($img->attributes() as $name => $value) {
-                $ext = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION));
-                if ($ext === 'jpg' || $ext === 'png' || $ext === 'gif') {
-                    $images[] = $value;
-                }
+        mb_ereg_search_init($xml_string, "<img .*?src=['\"](.+?)['\"]");
+        while (mb_ereg_search()) {
+            $matches = mb_ereg_search_getregs();
+            if ($matches[0] !== '') {
+                $images[] = $matches[1];
             }
         }
         return 0 < count($images) ? $images[0] : null;
@@ -412,9 +410,9 @@ class Content {
         $key = $lang ?? 'generic';
         if (array_key_exists($key, $this->translatedBody) === false) {
             if (is_null(Content::$parser) !== false) {
-                Content::$parser = new \cebe\markdown\MarkdownExtra();
+                Content::$parser = new Parsedown();
             }
-            $this->tranlatedBody[$key] = Content::$parser->parse($this->getRawBody($lang));
+            $this->tranlatedBody[$key] = Content::$parser->text($this->getRawBody($lang));
         }
         return $this->tranlatedBody[$key];
     }

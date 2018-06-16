@@ -2,6 +2,6 @@
     "require": {
         "mustangostang/spyc": "^0.6.2",
         "twig/twig": "~2.0",
-        "cebe/markdown": "^1.1"
+        "erusev/parsedown": "^1.7"
     }
 }

@@ -83,5 +83,5 @@ Can list up: no
 Has template: yes
 Template: atom.xml
 Has target text: yes
-Target text: description
+Target text: beginning
 Has body: no

@@ -173,7 +173,10 @@ class ContentsProvider {
         $contents = $this->getListUpContents();
         uasort($contents, function($lhs, $rhs) {
             if ($lhs->getLastUpdateTime() === $rhs->getLastUpdateTime()) {
-                return 0;
+                if ($lhs->getDateAndTime() === $rhs->getDateAndTime()) {
+                    return 0;
+                }
+                return ($lhs->getDateAndTime() < $rhs->getDateAndTime()) ? 1 : -1;
             }
             return ($lhs->getLastUpdateTime() < $rhs->getLastUpdateTime()) ? 1 : -1;
         });

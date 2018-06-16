@@ -1,0 +1,15 @@
+---
+Title: Content for unit test - Multiple representation image specification in body(absolute URL).
+Date: 2018-06-11
+Tags: 
+  - Test content
+...
+　――うつせみをさまよう旅のようなもの、などと思ったり。
+
+<div class="center youtube-container">
+<iframe>
+<img src="https://i.ytimg.com/vi/R6T4CFtS22k/sddefault.jpg" alt="旅から旅へ" />
+</iframe>
+</div>
+
+<img src="https://i.ytimg.com/vi/uacjJ4_dwrE/sddefault.jpg" />

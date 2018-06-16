@@ -37,5 +37,7 @@ BoothCMS is available on GitHub.
         * themes - theme directory
             * default - default theme
 * tests - test files
+    * contents - test only contents placement
     * controllers - contoller tests
     * models - model tests
+    * views - test only views placement
