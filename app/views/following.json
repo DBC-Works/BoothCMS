@@ -5,9 +5,9 @@
     "contents": [
 {% for content in main_contents %}
         {
-            "title": "{{ content.title|replace({'"': '\"'}) }}",
+            "title": "{{ content.title|replace({'"': '\\"'}) }}",
             "path": "{{ content.path }}",
-            "body": "{{ content.body|replace({'"': '\\"', "\n": "\\n", "\r": "\\r"}) }}",
+            "body": "{{ content.body|replace({'"': '\\"', "\n": "\\n", "\r": "\\r", "\t": "\\t"}) }}",
             "date": "{{ content.date|date(fmt_dt) }}",
             "update": "{{ content.update|date(fmt_dt) }}",
             "tags": [
