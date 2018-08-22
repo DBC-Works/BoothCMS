@@ -30,8 +30,12 @@ class BoothCmsApp {
         $env['lang'] = $this->getLang();
 
         $content_path = '';
-        if (array_key_exists('REQUEST_URI', $this->server_vars) !== false) {
-            $request_path = $this->server_vars['REQUEST_URI'];
+        if (array_key_exists('REQUEST_URI', $this->server_vars) !== false
+        || array_key_exists('UNENCODED_URL', $this->server_vars) !== false) {
+            $uri_server_vars = array_key_exists('UNENCODED_URL', $this->server_vars) !== false
+                            ? 'UNENCODED_URL'
+                            : 'REQUEST_URI';
+            $request_path = rawurldecode($this->server_vars[$uri_server_vars]);
 
             if (array_key_exists('PHP_SELF', $this->server_vars) !== false) {
                 $script_path = $this->server_vars['PHP_SELF'];

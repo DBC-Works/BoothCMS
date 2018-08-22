@@ -89,7 +89,7 @@
 {% endif %}
 
 {% if content.tags %}
-              <div>{% for tag in content.tags %} <a href="{{ site_url }}/tags/{{tag|e}}">#{{ tag|e }}</a>{% endfor %}</div>
+              <div>{% for tag in content.tags %} <a href="{{ site_url }}/tags/{{tag|url_encode}}">#{{ tag|e }}</a>{% endfor %}</div>
 {% endif %}
               <div>Publish: <time>{{ content.date|date(fmt_dt) }}</time> / Update: <time>{{ content.update|date(fmt_dt) }}</time></div>
             </article>
@@ -119,7 +119,7 @@
               </div>
 {% endif %}
               <div v-if="0 &lt; additionalContent.tags.length">
-                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="siteUrl + '/tags/' + tag">#{{ '{{' }}  tag {{ '}}' }} </a>
+                  <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="siteUrl + '/tags/' + encodeURIComponent(tag)">#{{ '{{' }} tag {{ '}}' }} </a>
                     <template v-if="index &lt; additionalContent.tags.length - 1"> </template>
                   </span>
               </div>
