@@ -278,7 +278,8 @@ class Controller {
             'site_author_twitter' =>$this->config['site_author_twitter'],
             'format_datetime' =>$this->config['format_datetime'],
             'sitemap_changefreq' => $this->config['sitemap_changefreq'],
-            'path' => $path
+            'path' => $path,
+            'theme_path' => '/views/themes/' . $this->config['theme']
         );
     }
 
@@ -408,6 +409,7 @@ class Controller {
             $translated
         );
         $this->twig_vars['image_url'] = $this->getRepresentationImageUrl($info);
+        $this->twig_vars['exclude_from_list'] = ($info->target->content->canListUp() === false);
     }
 
     /**
@@ -417,10 +419,10 @@ class Controller {
      * @return string render result
      */
     private function applyTemplate(string $template_name): string {
-        assert(0 < count($twig_vars));
+        assert(0 < count($this->twig_vars));
         assert($template_name !== '');
 
-        $themes_path = $this->env['root_path'] . '/views/themes/' . $this->config['theme'];
+        $themes_path = $this->env['root_path'] . $this->twig_vars['theme_path'];
         if (file_exists($themes_path . '/' .$template_name) === false) {
             $themes_path = $this->env['root_path'] . '/views';
             if (file_exists($themes_path . '/' .$template_name) === false) {

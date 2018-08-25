@@ -1,0 +1,14 @@
+---
+Title: Version 0.1.5 release
+Date: 2018-08-25
+Description: BoothCMS Version 0.1.5 released.
+Category: Announcement
+Tags: Release,Announcement,Blog
+...
+I publish 'BoothCMS' version 0.1.5. It contains these updates:
+
+* Add new template variables 'theme_path' and 'exclude_from_List'
+* Correct encoded path parameter handling([#10](https://github.com/DBC-Works/BoothCMS/issues/10))
+* Modify escape processing when sending succeeding contents([#9](https://github.com/DBC-Works/BoothCMS/issues/9))
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)

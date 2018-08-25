@@ -45,7 +45,7 @@ echo 'Has prev: ' . (is_null($content->prev) ? 'no' : 'yes') . "\n";
 ?>
 --EXPECT--
 404 is not in list: yes
-Content count: 16
+Content count: 17
 Latest content title: BoothCMS: a simple Flat file CMS
 Valid latest content date and time: yes
 Valid oldest content date and time: yes
@@ -62,9 +62,9 @@ Valid recent update content count: 5
 
 - Tag set
 Tag count: 10
-Release: 5(5)
-Announcement: 5(5)
-Blog: 5(5)
+Release: 6(6)
+Announcement: 6(6)
+Blog: 6(6)
 Test content: 4(4)
 Instruction: 4(4)
 Install: 3(3)

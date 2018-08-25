@@ -10,6 +10,12 @@
   <link rel="index" href="{{ site_url }}/" />
   <link rel="contents" href="{{ site_url }}/" />
   <link rel="start" href="{{ site_url }}/" />
+{% if content.next %}
+  <link rel="next" href="{{ site_url }}{{ content.next.path }}" />
+{% endif %}
+{% if content.prev %}
+  <link rel="prev" href="{{ site_url }}{{ content.prev.path }}" />
+{% endif %}
 {% if author %}
   <meta name="author" content="{{ author|e }}" />
   <meta name="DC.creator" content="{{ author|e }}" />
@@ -98,11 +104,11 @@
 {% if content.prev or content.next %}
           <div>
 {% if content.next %}
-            &lt;&lt; <a href="{{ site_url }}{{ content.next.path }}">{{ content.next.title|e }}</a>
+            &lt;&lt; <a rel="next" href="{{ site_url }}{{ content.next.path }}">{{ content.next.title|e }}</a>
 {% endif %}
 {% if content.prev and content.next %} | {% endif %}
 {% if content.prev %}
-            <a href="{{ site_url }}{{ content.prev.path }}">{{ content.prev .title|e }}</a> &gt;&gt;
+            <a rel="prev" href="{{ site_url }}{{ content.prev.path }}">{{ content.prev .title|e }}</a> &gt;&gt;
 {% endif %}
           </div>
 {% endif %}
@@ -201,12 +207,17 @@
           var self = this;
           axios.get(url)
             .then(function (response) {
-              self.moreButtonVisible = response.data.hasFollowing;
-              self.additionalContents = self.additionalContents.concat(response.data.contents);
-              ++(self.nextPageIndex);
+              if (response.data.contents) {
+                  self.moreButtonVisible = response.data.hasFollowing;
+                  self.additionalContents = self.additionalContents.concat(response.data.contents);
+                  ++(self.nextPageIndex);
+              } else {
+                  console.error(response.data);
+                  window.alert('Invalid content:\n' + response.data);
+              }
             })
             .catch(function (error) {
-              console.log(error);
+              console.error(error);
               window.alert(error);
             });
         }

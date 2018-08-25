@@ -7,6 +7,12 @@ Category: Software
 Tags: Log
 */
 
+### Version 0.1.5(2018-08-25)
+
+* Add new template variables 'theme_path' and 'exclude_from_List'
+* Correct encoded path parameter handling([#10](https://github.com/DBC-Works/BoothCMS/issues/10))
+* Modify escape processing when sending succeeding contents([#9](https://github.com/DBC-Works/BoothCMS/issues/9))
+
 ### Version 0.1.4(2018-06-16)
 
 * Change markdown parser from [cebe/markdown](http://markdown.cebe.cc/) to [Parsedown](http://parsedown.org/)([#8](https://github.com/DBC-Works/BoothCMS/issues/8))

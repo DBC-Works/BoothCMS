@@ -26,12 +26,14 @@ Default template uses [lit](https://ajusa.github.io/lit/docs/lit.html) CSS frame
 * author
 * title
 * description
+* theme_path
 * image_path
 * tags
 * as_list
 * main_contents(array(content or tag strings))
 * support_contents(array(content or tag strings))
 * has_following
+* exclude_from_list
 
 ##### Content properties
 

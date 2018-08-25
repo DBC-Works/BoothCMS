@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+Version 0.1.5(2018-08-25)
+-------------------------
+
+* Add new template variables 'theme_path' and 'exclude_from_List'
+* Correct encoded path parameter handling(#10)
+* Modify escape processing when sending succeeding contents(#9)
+
 Version 0.1.4(2018-06-16)
 -------------------------
 
