@@ -27,20 +27,24 @@ Default template uses [lit](https://ajusa.github.io/lit/docs/lit.html) CSS frame
 * title
 * description
 * theme_path
-* image_path
+* image_url
+* tag_set(array(tag set))
 * tags
 * as_list
 * main_contents(array(content or tag strings))
 * support_contents(array(content or tag strings))
+    * set if `support_contents` isn't `unused`
+* related_contents(array(content))
+    * set if `as_list` is false
 * has_following
 * exclude_from_list
 
 ##### Content properties
 
-* create_time
-* update_time
 * path
 * title
+* create_time
+* update_time
 * date
 * update
 * tags
@@ -52,3 +56,8 @@ Default template uses [lit](https://ajusa.github.io/lit/docs/lit.html) CSS frame
 * next
     * path
     * title
+
+##### Tag set properties
+
+* tag_name
+* tag_values(array(string))

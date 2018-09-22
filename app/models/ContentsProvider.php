@@ -271,6 +271,66 @@ class ContentsProvider {
     }
 
     /**
+     * Get related contents
+     * 
+     * @param Content $contet content to get related contents
+     * @param int $max_count max count
+     * @return array
+     */
+    public function getRelatedContentsOf(Content $content, int $max_count): array {
+        assert($content !== '');
+        assert(0 < $max_count);
+
+        $tags = $content->getTags();
+        $tag_count = count($tags);
+        if ($tag_count === 0) {
+            return array();
+        }
+
+        $match_contents = array();
+        $inclusion_contents = array();
+        $partial_match_contents = array();
+
+        $contents = array_filter($this->getListUpContents(), function($content) {
+            return 0 < count($content->getTags());
+        });
+        foreach ($contents as $key => $value) {
+            if ($value !== $content) {
+                $comparison_tags = $value->getTags();
+                $diff = array_diff($tags, $comparison_tags);
+                $diff_count = count($diff);
+                if ($diff_count === 0) {
+                    if ($tag_count === count($comparison_tags)) {
+                        $match_contents[$key] = $value;
+                        if ($max_count <= count($match_contents)) {
+                            break;
+                        }
+                    }
+                    else {
+                        $inclusion_contents[$key] = $value;
+                    }
+                }
+                else if ($diff_count < $tag_count) {
+                    $partial_match_contents[$key] = $value;
+                }
+            }
+        }
+        uasort($inclusion_contents, function($lhs, $rhs) {
+            return count($rhs->getTags()) - count($lhs->getTags());
+        });
+        uasort($partial_match_contents, function($lhs, $rhs) {
+            return ($tag_count - count($rhs->getTags())) - ($tag_count - count($lhs->getTags()));
+        });
+        $related_contents = array_merge($match_contents, $inclusion_contents, $partial_match_contents);
+        $related_contents = array_slice($related_contents, 0, $max_count);
+        $related_contents_info = array();
+        foreach ($related_contents as $key => $value) {
+            $related_contents_info[] = new ContentInfo($key, $value);
+        }
+        return $related_contents_info;
+    }
+
+    /**
      * Has content?
      *
      * @param string $path path

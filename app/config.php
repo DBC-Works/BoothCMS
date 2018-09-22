@@ -51,6 +51,8 @@ $config['excerpt_letter_limit_length'] = 300;
 // Date and time format
 // http://php.net/manual/en/class.datetime.php
 $config['format_datetime'] = DateTime::ATOM;
+// Max related contents count
+$config['max_related_contents_count'] = 5;
 
 //
 // Site metadata

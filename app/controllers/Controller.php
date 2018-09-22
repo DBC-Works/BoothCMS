@@ -56,11 +56,29 @@ class Controller {
                 : null;
     }
 
+    /** 
+     * @var ContentsProvider
+     */
     private $provider;
+
+    /**
+     * @var array
+     */
     private $config;
+
+    /**
+     * @var array
+     */
     private $env;
 
+    /**
+     * @var array
+     */
     private $twig_vars;
+
+    /**
+     * @var array
+     */
     private $takers;
 
     /**
@@ -163,6 +181,15 @@ class Controller {
      */
     private function getContentCountPerPage(): int {
         return intval($this->config['contents_per_page'] ?? 5);
+    }
+
+    /*
+     * Get max related contents count
+     * 
+     * @return int max related contents count
+     */
+    private function getMaxRelatedContentsCount(): int {
+        return intval($this->config['max_related_contents_count'] ?? 5);
     }
 
     /*
@@ -297,13 +324,29 @@ class Controller {
     }
 
     /**
+     * Get complemented image url
+     * 
+     * @param string $source_image_url source image url
+     */
+    private function getComplementedImageUrl(string $source_image_url = null) {
+        $image_url = $source_image_url;
+        if (is_null($image_url) !== false || $image_url === '') {
+            $image_url = $this->config['site_image_path'];
+        }
+        if (is_null($image_url) === false && mb_ereg_match('^https?:', $image_url) === false) {
+            $image_url = $this->config['site_url'] . $image_url;
+        }
+        return $image_url;
+    }
+
+    /**
      * Set subset info to Twig vars
      * 
      * @param SubsetInfo $subset_info subset_info
      * @param string $target_text target text
      */
     private function setSubsetInfoToTwigVars(SubsetInfo $subset_info, string $target_text) {
-        $this->twig_vars['image_path'] = $this->config['site_image_path'];
+        $this->twig_vars['image_url'] = $this->getComplementedImageUrl($this->config['site_image_path']);
 
         if ($subset_info->type === 'main_contents') {
             if (count($subset_info->subset->part) === 0) {
@@ -362,19 +405,15 @@ class Controller {
     }
 
     /**
-     * Get representation image url
-     * 
-     * @param TargetContainer $info content information
+     * Create link info
+     * @param ContentInfo $info target content info
+     * @return array link info(path and title)
      */
-    private function getRepresentationImageUrl(TargetContainer $info) {
-        $image_url = $info->target->content->getRepresentationImageSource();
-        if (is_null($image_url) !== false || $image_url === '') {
-            $image_url = $this->config['site_image_path'];
-        }
-        if (is_null($image_url) === false && mb_ereg_match('^https?:', $image_url) === false) {
-            $image_url = $this->config['site_url'] . $image_url;
-        }
-        return $image_url;
+    private function createLinkInfo(ContentInfo $info): array {
+        return array(
+            'path' => $info->path,
+            'title' => $info->content->getTitle($this->getLang())
+        );
     }
 
     /**
@@ -394,22 +433,23 @@ class Controller {
         $translated = $this->translateContent($content_path, $info->target->content, false, $target_text);
         $translated['body'] = $info->target->content->getTranslatedBody($this->getLang());
         if (is_null($info->prev) === false) {
-            $translated['prev'] = array(
-                'path' => $info->prev->path,
-                'title' => $info->prev->content->getTitle($this->getLang())
-            );
+            $translated['prev'] = $this->createLinkInfo($info->prev);
         }
         if (is_null($info->next) === false) {
-            $translated['next'] = array(
-                'path' => $info->next->path,
-                'title' => $info->next->content->getTitle($this->getLang())
-            );
+            $translated['next'] = $this->createLinkInfo($info->next);
         }
         $this->twig_vars['main_contents'] = array(
             $translated
         );
-        $this->twig_vars['image_url'] = $this->getRepresentationImageUrl($info);
+        $this->twig_vars['image_url'] = $this->getComplementedImageUrl($info->target->content->getRepresentationImageSource());
         $this->twig_vars['exclude_from_list'] = ($info->target->content->canListUp() === false);
+
+        $related_contents = $this->provider->getRelatedContentsOf($info->target->content, $this->getMaxRelatedContentsCount());
+        $related_contents_info = array();
+        foreach($related_contents as $related_content) {
+            $related_contents_info[] = $this->createLinkInfo($related_content);
+        }
+        $this->twig_vars['related_contents'] = $related_contents_info;
     }
 
     /**

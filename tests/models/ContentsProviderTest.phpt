@@ -42,10 +42,19 @@ echo 'Title: ' . $content->target->content->getTitle() . "\n";
 echo 'Path: ' . $content->target->path . "\n";
 echo 'Has next: ' . (is_null($content->next) ? 'no' : 'yes') . "\n";
 echo 'Has prev: ' . (is_null($content->prev) ? 'no' : 'yes') . "\n";
+
+echo "\n- related contents\n";
+$list_up_contents = $provider->getListUpContents();
+$content = end($list_up_contents);
+echo 'Base tags: ' . implode(' ', $content->getTags()) . "\n";
+$related_contents = $provider->getRelatedContentsOf($content, 100);
+foreach ($related_contents as $related_content) {
+    echo 'Related tags: ' . implode(' ', $related_content->content->getTags()) . "\n";
+}
 ?>
 --EXPECT--
 404 is not in list: yes
-Content count: 17
+Content count: 18
 Latest content title: BoothCMS: a simple Flat file CMS
 Valid latest content date and time: yes
 Valid oldest content date and time: yes
@@ -62,9 +71,9 @@ Valid recent update content count: 5
 
 - Tag set
 Tag count: 10
-Release: 6(6)
-Announcement: 6(6)
-Blog: 6(6)
+Release: 7(7)
+Announcement: 7(7)
+Blog: 7(7)
 Test content: 4(4)
 Instruction: 4(4)
 Install: 3(3)
@@ -78,3 +87,12 @@ Title: BoothCMS: a simple Flat file CMS
 Path: /index
 Has next: no
 Has prev: yes
+
+- related contents
+Base tags: Release Announcement Blog
+Related tags: Release Announcement Blog
+Related tags: Release Announcement Blog
+Related tags: Release Announcement Blog
+Related tags: Release Announcement Blog
+Related tags: Release Announcement Blog
+Related tags: Release Announcement Blog

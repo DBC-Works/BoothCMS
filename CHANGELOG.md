@@ -1,10 +1,17 @@
 CHANGELOG
 =========
 
+Version 0.2.0(2018-09-22)
+-------------------------
+
+* Add tag-based related contents extraction process(#11)
+    * Related contents are set to `related_contents` template variable
+* Change template variables name `image_path` to `image_url` and set url insted of path
+
 Version 0.1.5(2018-08-25)
 -------------------------
 
-* Add new template variables 'theme_path' and 'exclude_from_List'
+* Add new template variables `theme_path` and `exclude_from_List`
 * Correct encoded path parameter handling(#10)
 * Modify escape processing when sending succeeding contents(#9)
 
@@ -18,7 +25,7 @@ Version 0.1.3(2018-06-03)
 -------------------------
 
 * Update OGP image source processing(#6)
-* Add new template variables 'latest_content_date_and_time' and 'oldest_content_date_and_time'(#7)
+* Add new template variables `latest_content_date_and_time` and `oldest_content_date_and_time`(#7)
 
 Version 0.1.2(2018-04-23)
 -------------------------

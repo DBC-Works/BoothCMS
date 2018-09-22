@@ -80,26 +80,22 @@
 {% endif %}
 
 {% for content in main_contents %}
-          <div class="card">
-            <article>
-              <h2>{{ content.title|e }}</h2>
+          <article class="card">
+            <h2>{{ content.title|e }}</h2>
 {% if content.body %}
-              <div>
+            <div>
 {{ content.body }}
-              </div>
+            </div>
 {% if as_list %}
-              <div>
-                (<a href="{{ site_url }}{{ content.path }}">View content</a>)
-              </div>
+            <div>(<a href="{{ site_url }}{{ content.path }}">View content</a>)</div>
 {% endif %}
 {% endif %}
 
 {% if content.tags %}
-              <div>{% for tag in content.tags %} <a href="{{ site_url }}/tags/{{tag|url_encode}}">#{{ tag|e }}</a>{% endfor %}</div>
+            <div>{% for tag in content.tags %} <a href="{{ site_url }}/tags/{{tag|url_encode}}">#{{ tag|e }}</a>{% endfor %}</div>
 {% endif %}
-              <div>Publish: <time>{{ content.date|date(fmt_dt) }}</time> / Update: <time>{{ content.update|date(fmt_dt) }}</time></div>
-            </article>
-          </div><!-- .card -->
+            <div>Publish: <time>{{ content.date|date(fmt_dt) }}</time> / Update: <time>{{ content.update|date(fmt_dt) }}</time></div>
+          </article><!-- .card -->
 
 {% if content.prev or content.next %}
           <div>
@@ -112,6 +108,18 @@
 {% endif %}
           </div>
 {% endif %}
+
+{% if related_contents %}
+          <div>
+            <h3>Related contents</h3>
+            <ul>
+{% for content in related_contents %}
+              <li><a href="{{ site_url }}{{ content.path }}">{{ content.title|e }}</a></li>
+{% endfor %}
+            </ul>
+          </div>
+{% endif %}
+
 {% endfor %}{# main_contents #}
 
 {% if has_following %}
@@ -187,7 +195,7 @@
       },
       mounted: function() {
         this.additionalContentStyle.display = this.moreButtonStyle.display = 'block';
-        this.siteUrl = this.siteUrl.replace().replace('http://example.com', window.location.origin);
+        this.siteUrl = this.siteUrl.replace('http://example.com', window.location.origin);
 
         var links = document.getElementsByTagName('link');
         for (var index = 0; index !== links.length; ++index) {

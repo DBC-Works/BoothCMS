@@ -1,0 +1,16 @@
+---
+Title: Version 0.2.0 release
+Date: 2018-09-22
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+...
+I publish 'BoothCMS' version 0.2.0. It contains these updates:
+
+* Add tag-based related contents extraction process([#11](https://github.com/DBC-Works/BoothCMS/issues/11))
+    * Related contents are set to `related_contents` template variable
+* Change template variables name `image_path` to `image_url` and set url insted of path
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)
