@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+Version 0.2.1(2018-10-05)
+-------------------------
+
+* Add project logo(#3)
+* Improve description handling(avoid duplication with the body text)
+* Refactor some codes
+
 Version 0.2.0(2018-09-22)
 -------------------------
 

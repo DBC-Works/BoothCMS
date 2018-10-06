@@ -1,6 +1,8 @@
 BoothCMS
 ========
 
+![BoothCMS logo](./app/views/themes/default/BoothCMS-logo-400x200.png)
+
 BoothCMS is a simple flat file CMS.
 
 Features

@@ -1,0 +1,16 @@
+---
+Title: Version 0.2.1 release
+Date: 2018-10-05
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+...
+I publish 'BoothCMS' version 0.2.1. It contains these updates:
+
+* Add project logo([#3](https://github.com/DBC-Works/BoothCMS/issues/3))
+* Improve description handling(avoid duplication with the body text)
+* Refactor some codes
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)

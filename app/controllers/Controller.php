@@ -133,6 +133,8 @@ class Controller {
                 }
             }
         }
+        $as_list = ($target_contents !== '');
+
         if (is_null($info) !== false) {
             $info = $this->provider->getContent('/404');
             if ($this->config['in_test'] === false && $_SERVER) {
@@ -150,20 +152,20 @@ class Controller {
         $target_text = $info->target->content->hasTargetText()
                         ? $info->target->content->getTargetText()
                         : 'description';
-        $this->twig_vars['description'] = $this->getBody($info->target->content, $target_text);
+        $this->twig_vars['description'] = $this->getBody($info->target->content, $target_text, $as_list === false);
         if ($this->twig_vars['description'] === '') {
             $this->twig_vars['description'] = $this->config['site_description'];
         }
 
         $target_to_set = '';
-        $this->twig_vars['as_list'] = ($target_contents !== '');
-        if ($this->twig_vars['as_list']) {
+        $this->twig_vars['as_list'] = $as_list;
+        if ($as_list) {
             $subset_info = $this->getContentsSubset($content_path, $taker, $params);
             $target_to_set = $subset_info->type;
-            $this->setSubsetInfoToTwigVars($subset_info, $target_text);
+            $this->twig_vars += $this->makeSubsetInfo($subset_info, $target_text);
         }
         else {
-            $this->setSingleContentInfoToTwigVars($content_path, $target_text, $info);
+            $this->twig_vars += $this->makeSingleContentInfo($content_path, $target_text, $info);
         }
 
         $this->setSupportContentsToTwigVars($content_path, $target_contents, $target_to_set, $target_text, $info);
@@ -171,7 +173,7 @@ class Controller {
         $template_name = $info->target->content->hasTemplate()
                         ? $info->target->content->getTemplate()
                         : $this->config['default_template'];
-        return $this->applyTemplate($template_name);
+        return $this->applyTemplate($template_name, $this->twig_vars);
     }
 
     /*
@@ -204,15 +206,16 @@ class Controller {
      * 
      * @param Content $content content
      * @param string $target_text target text of body
+     * @param bool $avoid_duplication avoid duplication with body
      * @return string
      */
-    private function getBody(Content $content, string $target_text): string {
+    private function getBody(Content $content, string $target_text, bool $avoid_duplication): string {
         if ($target_text === 'description' && $content->hasDescription()) {
             return $content->getDescription($this->getLang());
         }
 
         $body = '';
-        if ($target_text === 'beginning') {
+        if ($target_text === 'beginning' || $avoid_duplication) {
             $part = $content->getBeginningOfBody($this->config['excerpt_letter_limit_length'], $this->getLang());
             $body = $part->part;
             if ($body !== '' && $part->hasFollowing) {
@@ -246,7 +249,7 @@ class Controller {
             $translated['category'] = $content->getCategory();
         }
         if ($require_body) {
-            $translated['body'] = $this->getBody($content, $target_text);
+            $translated['body'] = $this->getBody($content, $target_text, false);
         }
         return $translated;
     }
@@ -274,16 +277,22 @@ class Controller {
      * @param array|null $params parameters
      * @return SubsetInfo
      */
-    private function getContentsSubset(string $path, ContentsTaker $taker, array $params = null): SubsetInfo {
+    private function getContentsSubset(
+        string $path,
+        ContentsTaker $taker,
+        array $params = null
+    ): SubsetInfo {
         assert($path !== '');
 
         $set_var_name = 'main_contents';
         $target_text = '';
         $info = new SubsetInfo();
-        $info->subset = $taker->take($taker->createTakeArgs($path, $params, 0),
-                                     $set_var_name,
-                                     $target_text,
-                                     $this->twig_vars);
+        $info->subset = $taker->take(
+            $taker->createTakeArgs($path, $params, 0),
+            $set_var_name,
+            $target_text,
+            $this->twig_vars
+        );
         $info->type = $set_var_name;
         $info->target_text = $target_text;
         return $info;
@@ -340,39 +349,43 @@ class Controller {
     }
 
     /**
-     * Set subset info to Twig vars
+     * Make subset info
      * 
      * @param SubsetInfo $subset_info subset_info
      * @param string $target_text target text
+     * @return array subset info
      */
-    private function setSubsetInfoToTwigVars(SubsetInfo $subset_info, string $target_text) {
-        $this->twig_vars['image_url'] = $this->getComplementedImageUrl($this->config['site_image_path']);
+    private function makeSubsetInfo(SubsetInfo $subset_info, string $target_text): array {
+        $vars = array(
+            'image_url' => $this->getComplementedImageUrl($this->config['site_image_path'])
+        );
 
         if ($subset_info->type === 'main_contents') {
             if (count($subset_info->subset->part) === 0) {
-                $this->twig_vars['update_time'] = new DateTime('now');
-                $this->twig_vars[$subset_info->type] = array();
+                $vars['update_time'] = new DateTime('now');
+                $vars[$subset_info->type] = array();
             }
             else {
-                $this->twig_vars['update_time'] = current($subset_info->subset->part)->getLastUpdateTime();
+                $vars['update_time'] = current($subset_info->subset->part)->getLastUpdateTime();
                 $strict_target_text = $subset_info->target_text !== ''
                                     ? $subset_info->target_text
                                     : $target_text;
-                $this->twig_vars[$subset_info->type] = $this->translateContents($subset_info->subset->part, $strict_target_text);
+                $vars[$subset_info->type] = $this->translateContents($subset_info->subset->part, $strict_target_text);
             }
-            $this->twig_vars['has_following'] = $subset_info->subset->hasFollowing;
+            $vars['has_following'] = $subset_info->subset->hasFollowing;
         }
         else if ($subset_info->type === 'tag_set') {
-            $this->twig_vars[$subset_info->type] = $subset_info->subset;
-            $this->twig_vars['has_following'] = false;
+            $vars[$subset_info->type] = $subset_info->subset;
+            $vars['has_following'] = false;
         }
         else {
             throw new Exception('Not implemented variable name: ' . $subset_info->type);
         }
+        return $vars;
     }
 
     /**
-     * Set single content info to Twig vars
+     * Set support contents info to Twig vars
      * 
      * @param string $content_path content path
      * @param string $target_contents target contents
@@ -395,8 +408,11 @@ class Controller {
             $this->twig_vars['support_contents'] = $this->twig_vars[$target_to_set];
         }
         else {
-            $dummy_target_text = '';
-            $support_info = $this->getContentsSubset($content_path, $this->takers[$support_target], null, $dummy_target_text);
+            $support_info = $this->getContentsSubset(
+                $content_path,
+                $this->takers[$support_target],
+                null
+            );
             if ($support_info->type !== 'main_contents') {
                 throw new Exception('Not usable for support content var name: ' . $support_info->type);
             }
@@ -406,8 +422,9 @@ class Controller {
 
     /**
      * Create link info
-     * @param ContentInfo $info target content info
-     * @return array link info(path and title)
+     * 
+     * @param ContentInfo $info content info
+     * @return array link info
      */
     private function createLinkInfo(ContentInfo $info): array {
         return array(
@@ -417,19 +434,17 @@ class Controller {
     }
 
     /**
-     * Set single content info to Twig vars
+     * Make single content info
      * 
      * @param string $content_path content path
      * @param string $target_text target text
      * @param TargetContainer $info content information to set
+     * @return array single content info
      */
-    private function setSingleContentInfoToTwigVars(string $content_path, string $target_text, TargetContainer $info) {
+    private function makeSingleContentInfo(string $content_path, string $target_text, TargetContainer $info): array {
         assert($content_path !== '');
         assert($target_text !== '');
 
-        $this->twig_vars['create_time'] = $info->target->content->getDateAndTime();
-        $this->twig_vars['update_time'] = $info->target->content->getLastUpdateTime();
-        $this->twig_vars['tags'] = $info->target->content->getTags();
         $translated = $this->translateContent($content_path, $info->target->content, false, $target_text);
         $translated['body'] = $info->target->content->getTranslatedBody($this->getLang());
         if (is_null($info->prev) === false) {
@@ -438,18 +453,22 @@ class Controller {
         if (is_null($info->next) === false) {
             $translated['next'] = $this->createLinkInfo($info->next);
         }
-        $this->twig_vars['main_contents'] = array(
-            $translated
-        );
-        $this->twig_vars['image_url'] = $this->getComplementedImageUrl($info->target->content->getRepresentationImageSource());
-        $this->twig_vars['exclude_from_list'] = ($info->target->content->canListUp() === false);
 
         $related_contents = $this->provider->getRelatedContentsOf($info->target->content, $this->getMaxRelatedContentsCount());
         $related_contents_info = array();
         foreach($related_contents as $related_content) {
             $related_contents_info[] = $this->createLinkInfo($related_content);
         }
-        $this->twig_vars['related_contents'] = $related_contents_info;
+
+        return array(
+            'create_time' => $info->target->content->getDateAndTime(),
+            'update_time' => $info->target->content->getLastUpdateTime(),
+            'tags' => $info->target->content->getTags(),
+            'main_contents' => array($translated),
+            'image_url' => $this->getComplementedImageUrl($info->target->content->getRepresentationImageSource()),
+            'exclude_from_list' => ($info->target->content->canListUp() === false),
+            'related_contents' => $related_contents_info
+        );
     }
 
     /**
@@ -458,11 +477,11 @@ class Controller {
      * @param string $template_name template name
      * @return string render result
      */
-    private function applyTemplate(string $template_name): string {
-        assert(0 < count($this->twig_vars));
+    private function applyTemplate(string $template_name, array $twig_vars): string {
+        assert(0 < count($twig_vars));
         assert($template_name !== '');
 
-        $themes_path = $this->env['root_path'] . $this->twig_vars['theme_path'];
+        $themes_path = $this->env['root_path'] . $twig_vars['theme_path'];
         if (file_exists($themes_path . '/' .$template_name) === false) {
             $themes_path = $this->env['root_path'] . '/views';
             if (file_exists($themes_path . '/' .$template_name) === false) {
@@ -473,7 +492,7 @@ class Controller {
         $loader = new Twig_Loader_Filesystem($themes_path);
         $twig = new Twig_Environment($loader, $this->createTwigOptions());
         $twig->addExtension(new Twig_Extension_Debug());
-        return $twig->render($template_name, $this->twig_vars);
+        return $twig->render($template_name, $twig_vars);
     }
 }
 ?>

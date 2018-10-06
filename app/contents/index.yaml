@@ -16,6 +16,9 @@ Category: Software
 # Tag(optional; format is CSV)
 Tags: Summary
 ...
+
+<img style="display: block; margin: 0 auto" src="/views/themes/default/BoothCMS-logo-400x200.png" alt="BoothCMS logo" />
+
 BoothCMS is a simple Flat file CMS.
 
 ### Features

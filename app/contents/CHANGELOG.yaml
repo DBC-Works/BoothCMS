@@ -7,6 +7,12 @@ Category: Software
 Tags: Log
 */
 
+### Version 0.2.1(2018-10-05)
+
+* Add project logo([#3](https://github.com/DBC-Works/BoothCMS/issues/3))
+* Improve description handling(avoid duplication with the body text)
+* Refactor some codes
+
 ### Version 0.2.0(2018-09-22)
 
 * Add tag-based related contents extraction process([#11](https://github.com/DBC-Works/BoothCMS/issues/11))

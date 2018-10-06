@@ -36,7 +36,7 @@ $config['timezone'] = 'UTC';
 //
 
 // Default site representation image path(to use [Open Graph protocol](http://ogp.me/)).
-$config['site_image_path'] = null;
+$config['site_image_path'] = "/views/themes/default/BoothCMS-logo-400x200.png";
 // Contents count per page
 $config['contents_per_page'] = 5;
 // View theme
