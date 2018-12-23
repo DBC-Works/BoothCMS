@@ -1,10 +1,18 @@
 <?php
-require_once __DIR__ . '/Content.php';
+/**
+ * Contents provider classes
+ *
+ * @copyright D.B.C.
+ * @license https://opensource.org/licenses/mit-license.html MIT License
+ */
+
+ require_once __DIR__ . '/Content.php';
 
 /**
  * ContentInfo
  */
-class ContentInfo {
+final class ContentInfo
+{
     public $path;
     public $content;
 
@@ -25,7 +33,8 @@ class ContentInfo {
 /**
  * TargetContainer
  */
-class TargetContainer {
+final class TargetContainer
+{
     public $prev;
     public $target;
     public $next;
@@ -34,7 +43,8 @@ class TargetContainer {
 /**
  * ContentsProvider
  */
-class ContentsProvider {
+final class ContentsProvider
+{
     /**
      * Load contents
      *
@@ -45,14 +55,14 @@ class ContentsProvider {
     private static function load(string $contents_dir_path, string $child_path): array {
         assert(file_exists($contents_dir_path) && is_dir($contents_dir_path));
 
-        $contents = array();
+        $contents = [];
 
         $dir_path = $contents_dir_path . $child_path;
         foreach (scandir($dir_path) as $entry) {
             $entry_path = $dir_path . '/' . $entry;
             if (is_dir($entry_path)) {
                 if ($entry !== '.' && $entry !== '..') {
-                    $child_contents = ContentsProvider::load($contents_dir_path, $child_path . '/' . $entry);
+                    $child_contents = self::load($contents_dir_path, $child_path . '/' . $entry);
                     $contents = array_merge($contents, $child_contents);
                 }
             }
@@ -96,7 +106,7 @@ class ContentsProvider {
     public function __construct(string $contents_dir_path) {
         assert(is_null($content_dir_path) === false && file_exists($content_dir_path) && is_dir($content_dir_path));
 
-        $this->contents = ContentsProvider::load(rtrim($contents_dir_path, '/\\'), '');
+        $this->contents = self::load(rtrim($contents_dir_path, '/\\'), '');
         uasort($this->contents, function($lhs, $rhs) {
             if ($lhs->getDateAndTime() === $rhs->getDateAndTime()) {
                 return 0;
@@ -156,7 +166,7 @@ class ContentsProvider {
         assert(0 < $max_count);
         assert(0 <= $page_index);
 
-        return ContentsProvider::createSubsetInfo($this->getListUpContents(), $max_count, $page_index);
+        return self::createSubsetInfo($this->getListUpContents(), $max_count, $page_index);
     }
 
     /**
@@ -180,7 +190,7 @@ class ContentsProvider {
             }
             return ($lhs->getLastUpdateTime() < $rhs->getLastUpdateTime()) ? 1 : -1;
         });
-        return ContentsProvider::createSubsetInfo($contents, $max_count, $page_index);
+        return self::createSubsetInfo($contents, $max_count, $page_index);
     }
 
     /**
@@ -201,13 +211,13 @@ class ContentsProvider {
         if ($trail_delimiter !== mb_strlen($base_path)) {
             $base_path = mb_substr($path, 0, $trail_delimiter + 1);
         }
-        $descendants = array();
+        $descendants = [];
         foreach ($this->getListUpContents() as $key => $value) {
             if (mb_strpos($key, $base_path, 0) === 0) {
                 $descendants[$key] = $value;
             }
         }
-        return ContentsProvider::createSubsetInfo($descendants, $max_count, $page_index);
+        return self::createSubsetInfo($descendants, $max_count, $page_index);
     }
 
     /**
@@ -216,11 +226,11 @@ class ContentsProvider {
      * @return array
      */
     public function getTagSet(): array {
-        $tags = array();
+        $tags = [];
         foreach ($this->getListUpContents() as $key => $value) {
             foreach ($value->getTags() as $tag) {
                 if (array_key_exists($tag, $tags) === false) {
-                    $tags[$tag] = array();
+                    $tags[$tag] = [];
                 }
                 $tags[$tag][] = $key;
             }
@@ -262,10 +272,10 @@ class ContentsProvider {
         $part = null;
         if (count($tagged_contents) === 0) {
             $part = new PartOfContent;
-            $part->part = array();
+            $part->part = [];
         }
         else {
-            $part = ContentsProvider::createSubsetInfo($tagged_contents, $max_count, $page_index);
+            $part = self::createSubsetInfo($tagged_contents, $max_count, $page_index);
         }
         return $part;
     }
@@ -284,12 +294,12 @@ class ContentsProvider {
         $tags = $content->getTags();
         $tag_count = count($tags);
         if ($tag_count === 0) {
-            return array();
+            return [];
         }
 
-        $match_contents = array();
-        $inclusion_contents = array();
-        $partial_match_contents = array();
+        $match_contents = [];
+        $inclusion_contents = [];
+        $partial_match_contents = [];
 
         $contents = array_filter($this->getListUpContents(), function($content) {
             return 0 < count($content->getTags());
@@ -310,7 +320,7 @@ class ContentsProvider {
                         $inclusion_contents[$key] = $value;
                     }
                 }
-                else if ($diff_count < $tag_count) {
+                elseif ($diff_count < $tag_count) {
                     $partial_match_contents[$key] = $value;
                 }
             }
@@ -323,7 +333,7 @@ class ContentsProvider {
         });
         $related_contents = array_merge($match_contents, $inclusion_contents, $partial_match_contents);
         $related_contents = array_slice($related_contents, 0, $max_count);
-        $related_contents_info = array();
+        $related_contents_info = [];
         foreach ($related_contents as $key => $value) {
             $related_contents_info[] = new ContentInfo($key, $value);
         }
@@ -371,4 +381,3 @@ class ContentsProvider {
         return $target;
     }
 }
-?>

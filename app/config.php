@@ -53,6 +53,8 @@ $config['excerpt_letter_limit_length'] = 300;
 $config['format_datetime'] = DateTime::ATOM;
 // Max related contents count
 $config['max_related_contents_count'] = 5;
+// Structured data type array to render every contents
+$config['common_contents_structured_data_types'] = [ ];
 
 //
 // Site metadata
@@ -70,4 +72,3 @@ $config['sitemap_changefreq'] = 'monthly';
 //
 $config['twig_enable_cache'] = false;
 $config['twig_enable_debug'] = false;
-?>

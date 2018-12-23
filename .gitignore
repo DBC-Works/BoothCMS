@@ -3,6 +3,7 @@
 *.out
 *.exp
 .vscode/**
+app/aspnet_client/**
 app/vendor/**
 tests/controllers/**/*.php
 tests/models/**/*.php

@@ -7,6 +7,17 @@ Category: Software
 Tags: Log
 */
 
+Version 0.3.0(2018-12-23)
+-------------------------
+
+* Add structured data support([#5](https://github.com/DBC-Works/BoothCMS/issues/5))
+* Improve content image handling
+* Correct handling of content including mustache('{{')
+* Update a lot of codes
+    * Follow php 7.2 update
+    * Try to follow [PSR-1](https://www.php-fig.org/psr/psr-1/) and [PSR-2](https://www.php-fig.org/psr/psr-2/)
+    * Refactoring
+
 ### Version 0.2.1(2018-10-05)
 
 * Add project logo([#3](https://github.com/DBC-Works/BoothCMS/issues/3))

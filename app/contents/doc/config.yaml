@@ -85,6 +85,10 @@ Set date and time format(see [Supported Date and Time Formats](http://php.net/ma
 
 Set max related contents count(default: 5).
 
+#### common_contents_structured_data_types
+
+Set structured data type array to render every contents(only 'BlogPosting' can be set).
+
 ### Site metadata
 
 #### site_rfc4151_id

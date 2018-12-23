@@ -1,0 +1,12 @@
+---
+Title: Escape double mustaches test content
+Date: 2018-12-08
+Template: test-template.html
+Tags: 
+  - Test content
+...
+BoothCMS escapes double mustaches('{{').
+
+BoothCMS also escapes triple mustaches('{{{').
+
+BoothCMS also escapes quadruple mustaches('{{{{').

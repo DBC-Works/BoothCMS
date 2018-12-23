@@ -11,8 +11,8 @@ require_once __DIR__ . '/../app/config.php';
 $config['in_test'] = true;
 $config['lang'] = 'en';
 $config['timezone'] = 'UTC';
+$config['site_url'] = 'http://example.com';
 $config['site_image_path'] = '/image.png';
 
 //$config['fmt_datetime'] = DateTime::ATOM;
 $config['format_datetime'] = 'Y/m/d H:m:s';
-?>

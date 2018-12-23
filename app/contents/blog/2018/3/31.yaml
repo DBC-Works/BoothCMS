@@ -4,6 +4,9 @@ Date: 2018-03-31
 Description: BoothCMS Version 0.1.1 released.
 Category: Announcement
 Tags: Release,Announcement,Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
 ...
 I publish 'BoothCMS' version 0.1.1. It contains some bug fixes and document updates.
 

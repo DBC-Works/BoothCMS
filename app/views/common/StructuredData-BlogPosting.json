@@ -1,0 +1,27 @@
+{% set fmt_iso8601_date = 'Y-m-d' %}
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "description": "{{ description }}",
+  "author": "{{ author }}",
+  "datePublished": "{{ create_time|date(fmt_iso8601_date) }}",
+  "dateModified": "{{ update_time|date(fmt_iso8601_date) }}",
+  "headline": "{{ title }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site_author }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site_url }}{{ site_image_path }}"
+    }
+  },
+  "image": {
+{% if image_url %}
+    "@type": "ImageObject",
+    "url": "{{ image_url }}"
+{% endif %}
+  }
+}

@@ -1,5 +1,5 @@
 --TEST--
-Template variables setting test
+Escape double mustaches test
 --FILE--
 <?php
 require_once __DIR__ . '/../../app/models/ContentsProvider.php';
@@ -10,13 +10,14 @@ $env['root_path'] = realpath(__DIR__ . '/../');
 
 $provider = new ContentsProvider(__DIR__ . '/../../tests/contents');
 $controller = new Controller($provider, $config, $env);
-$html_string = $controller->render('/template-variables');
-//echo $html_string . "\n";
+$html_string = $controller->render('/escape-double-mustaches');
+// echo $html_string . "\n";
 $html = new SimpleXMLElement($html_string);
-foreach ($html->body->ul->xpath('//li') as $li) {
-    echo $li . "\n";
+foreach ($html->body->p as $p) {
+    echo $p . "\n";
 }
 ?>
 --EXPECT--
-Latest content date and time: 2018-12-08
-Oldest content date and time: 2018-06-01
+BoothCMS escapes double mustaches('\u007b{').
+BoothCMS also escapes triple mustaches('\u007b\u007b{').
+BoothCMS also escapes quadruple mustaches('\u007b\u007b\u007b{').

@@ -1,6 +1,13 @@
 <?php
+/**
+ * Contents take classes
+ *
+ * @copyright D.B.C.
+ * @license https://opensource.org/licenses/mit-license.html MIT License
+ */
 
-class TakeArgs {
+final class TakeArgs
+{
     public $path;
     public $params;
     public $page_index = 0;
@@ -9,7 +16,8 @@ class TakeArgs {
 /**
  * Contents taker
  */
-abstract class ContentsTaker {
+abstract class ContentsTaker
+{
     private static $takers = null;
 
     /*
@@ -21,14 +29,14 @@ abstract class ContentsTaker {
      */
     public static function getTakers(ContentsProvider $provider, int $contents_per_page): array {
         if (is_null(self::$takers) !== false) {
-            self::$takers = array(
+            self::$takers = [
                 'recent-publish' => new RecentPublishContentsTaker($provider, $contents_per_page),
                 'recent-update' => new RecentUpdateContentsTaker($provider, $contents_per_page),
                 'descendants' => new DecendantsTaker($provider, $contents_per_page),
                 'tagged-contents' => new TaggedContentsTaker($provider, $contents_per_page),
                 'following' => new FollowingContentsTaker($provider, $contents_per_page),
                 'all' => new AllContentsTaker($provider, $contents_per_page)
-            );
+            ];
         }
         return self::$takers;
     }
@@ -106,7 +114,8 @@ abstract class ContentsTaker {
 /**
  * Recent publish contents taker
  */
-class RecentPublishContentsTaker extends ContentsTaker {
+final class RecentPublishContentsTaker extends ContentsTaker
+{
     /*
      * Validate parameter
      * 
@@ -126,7 +135,7 @@ class RecentPublishContentsTaker extends ContentsTaker {
      * @return TakeArgs instance of TakeArgs
      */
     public function createTakeArgs(string $path, array $params = null, int $page_index): TakeArgs {
-        return ContentsTaker::createDefaultTakeArgsInstance($path, $params, $page_index);
+        return self::createDefaultTakeArgsInstance($path, $params, $page_index);
     }
 
     /*
@@ -146,7 +155,8 @@ class RecentPublishContentsTaker extends ContentsTaker {
 /**
  * Recent update contents taker
  */
-class RecentUpdateContentsTaker extends ContentsTaker {
+final class RecentUpdateContentsTaker extends ContentsTaker
+{
     /*
      * Validate parameter
      * 
@@ -166,7 +176,7 @@ class RecentUpdateContentsTaker extends ContentsTaker {
      * @return TakeArgs instance of TakeArgs
      */
     public function createTakeArgs(string $path, array $params = null, int $page_index): TakeArgs {
-        return ContentsTaker::createDefaultTakeArgsInstance($path, $params, $page_index);
+        return self::createDefaultTakeArgsInstance($path, $params, $page_index);
     }
 
     /*
@@ -186,7 +196,8 @@ class RecentUpdateContentsTaker extends ContentsTaker {
 /**
  * Decendants taker
  */
-class DecendantsTaker extends ContentsTaker {
+final class DecendantsTaker extends ContentsTaker
+{
     /*
      * Validate parameter
      * 
@@ -206,7 +217,7 @@ class DecendantsTaker extends ContentsTaker {
      * @return TakeArgs instance of TakeArgs
      */
     public function createTakeArgs(string $path, array $params = null, int $page_index): TakeArgs {
-        return ContentsTaker::createDefaultTakeArgsInstance($path, $params, $page_index);
+        return self::createDefaultTakeArgsInstance($path, $params, $page_index);
     }
     /*
      * Take contents
@@ -225,7 +236,8 @@ class DecendantsTaker extends ContentsTaker {
 /**
  * Tagged contents taker
  */
-class TaggedContentsTaker extends ContentsTaker {
+final class TaggedContentsTaker extends ContentsTaker
+{
     /*
      * Validate parameter
      * 
@@ -249,7 +261,7 @@ class TaggedContentsTaker extends ContentsTaker {
      * @return TakeArgs instance of TakeArgs
      */
     public function createTakeArgs(string $path, array $params = null, int $page_index): TakeArgs {
-        return ContentsTaker::createDefaultTakeArgsInstance($path, $params, $page_index);
+        return self::createDefaultTakeArgsInstance($path, $params, $page_index);
     }
 
     /*
@@ -276,7 +288,8 @@ class TaggedContentsTaker extends ContentsTaker {
 /**
  * Following contents taker
  */
-class FollowingContentsTaker extends ContentsTaker {
+final class FollowingContentsTaker extends ContentsTaker
+{
     /*
      * Validate parameter
      * 
@@ -325,7 +338,7 @@ class FollowingContentsTaker extends ContentsTaker {
         if ($target_type === 'following') {
             throw new Exception('Recursive following');
         }
-        $takers = ContentsTaker::getTakers($this->provider, $this->contents_per_page);
+        $takers = self::getTakers($this->provider, $this->contents_per_page);
         if (array_key_exists($target_type, $takers) === false) {
             throw new Exception('Unknown target: ' . $target_type);
         }
@@ -347,7 +360,8 @@ class FollowingContentsTaker extends ContentsTaker {
 /**
  * All contents taker
  */
-class AllContentsTaker extends ContentsTaker {
+final class AllContentsTaker extends ContentsTaker
+{
     /*
      * Validate parameter
      * 
@@ -367,7 +381,7 @@ class AllContentsTaker extends ContentsTaker {
      * @return TakeArgs instance of TakeArgs
      */
     public function createTakeArgs(string $path, array $params = null, int $page_index): TakeArgs {
-        return ContentsTaker::createDefaultTakeArgsInstance($path, $params, $page_index);
+        return self::createDefaultTakeArgsInstance($path, $params, $page_index);
     }
 
     /*
@@ -385,4 +399,3 @@ class AllContentsTaker extends ContentsTaker {
         return $part;
     }
 }
-?>

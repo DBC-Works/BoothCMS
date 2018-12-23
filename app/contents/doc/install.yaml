@@ -5,7 +5,7 @@ Description: BoothCMS installation instruction
 Category: Instruction
 Tags: Install,Instruction
 ...
-BoothCMS requires PHP v7.0 or later.
+BoothCMS requires PHP v7.2 or later.
 
 * Microsoft Azure App Service Web Apps
 * Microsoft Internet Information Services(IIS)

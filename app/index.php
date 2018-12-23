@@ -1,4 +1,11 @@
 <?php
+/**
+ * BoothCMS app
+ *
+ * @copyright D.B.C.
+ * @license https://opensource.org/licenses/mit-license.html MIT License
+ */
+
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/models/ContentsProvider.php';
 require_once __DIR__ . '/controllers/Controller.php';
@@ -6,7 +13,7 @@ require_once __DIR__ . '/controllers/Controller.php';
 /**
  * BoothCmsApp
  */
-class BoothCmsApp {
+final class BoothCmsApp {
     private $server_vars;
     private $config;
 
@@ -90,4 +97,3 @@ catch (Exception $e) {
     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
     echo 'Exception occured: ',  $e->getMessage(), "\n";
 }
-?>

@@ -1,0 +1,23 @@
+---
+Title: Version 0.3.0 release
+Date: 2018-12-23
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
+...
+I publish 'BoothCMS' version 0.3.0. It contains these updates:
+
+* Add structured data support([#5](https://github.com/DBC-Works/BoothCMS/issues/5))
+* Improve content image handling
+* Correct handling of content including mustache('{{')
+* Update a lot of codes
+    * Follow php 7.2 update
+    * Try to follow [PSR-1](https://www.php-fig.org/psr/psr-1/) and [PSR-2](https://www.php-fig.org/psr/psr-2/)
+    * Refactoring
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)

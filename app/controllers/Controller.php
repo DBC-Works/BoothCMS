@@ -1,12 +1,21 @@
 <?php
+/**
+ * Controller
+ *
+ * @copyright D.B.C.
+ * @license https://opensource.org/licenses/mit-license.html MIT License
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../models/ContentsProvider.php';
 require_once __DIR__ . '/ContentsTaker.php';
+include_once __DIR__ . '/TemplateProcessing.php';
 
 /**
  * Subset info
  */
-class SubsetInfo {
+final class SubsetInfo
+{
     public $type;
     public $target_text;
     public $subset;
@@ -15,15 +24,19 @@ class SubsetInfo {
 /**
  * Controller
  */
-class Controller {
+final class Controller
+{
+    use TemplateProcessing;
+
     /*
      * Get target content
      * 
      * @param ContentsProvider $provider contents provider
      * @param string $path path
      * @param array& $params parameters
+     * @return TargetContainer | null target content
      */
-    public static function getContent(ContentsProvider $provider, string $path, array& $params) {
+    public static function getContent(ContentsProvider $provider, string $path, array& $params): ?TargetContainer {
         $content_path = $path;
 
         while ($provider->hasContent($content_path) === false) {
@@ -113,8 +126,8 @@ class Controller {
         $this->twig_vars['latest_content_date_and_time'] = $this->provider->getLatestContentDateAndTime();
         $this->twig_vars['oldest_content_date_and_time'] = $this->provider->getOldestContentDateAndTime();
 
-        $params = array();
-        $info = Controller::getContent($this->provider, $path, $params);
+        $params = [];
+        $info = self::getContent($this->provider, $path, $params);
 
         $target_contents = '';
         $taker = null;
@@ -152,9 +165,9 @@ class Controller {
         $target_text = $info->target->content->hasTargetText()
                         ? $info->target->content->getTargetText()
                         : 'description';
-        $this->twig_vars['description'] = $this->getBody($info->target->content, $target_text, $as_list === false);
+        $this->twig_vars['description'] = self::escapeMustaches($this->getBody($info->target->content, $target_text, $as_list === false));
         if ($this->twig_vars['description'] === '') {
-            $this->twig_vars['description'] = $this->config['site_description'];
+            $this->twig_vars['description'] = self::escapeMustaches($this->config['site_description']);
         }
 
         $target_to_set = '';
@@ -197,7 +210,7 @@ class Controller {
     /*
      * Get language
      */
-    private function getLang() {
+    private function getLang(): ?string {
         return $this->env['lang'];
     }
 
@@ -238,18 +251,18 @@ class Controller {
      * @return array translated contents
      */
     private function translateContent(string $path, Content $content, bool $require_body, string $target_text): array {
-        $translated = array(
+        $translated = [
             'path' => $path,
             'title' => $content->getTitle($this->getLang()),
             'date' => $content->getDateAndTime(),
             'update' => $content->getLastUpdateTime(),
             'tags' => $content->getTags()
-        );
+        ];
         if ($content->hasCategory()) {
             $translated['category'] = $content->getCategory();
         }
         if ($require_body) {
-            $translated['body'] = $this->getBody($content, $target_text, false);
+            $translated['body'] = self::escapeMustaches($this->getBody($content, $target_text, false));
         }
         return $translated;
     }
@@ -262,7 +275,7 @@ class Controller {
      * @return array
      */
     private function translateContents(array $contents, string $target_text): array {
-        $translated = array();
+        $translated = [];
         foreach ($contents as $key => $value) {
             $translated[] = $this->translateContent($key, $value, true, $target_text);
         }
@@ -306,7 +319,7 @@ class Controller {
     private function createBasicTwigArgs(string $path): array {
         assert($path !== '');
 
-        return array(
+        return [
             'site_title' => $this->config['site_title'],
             'site_subtitle' => $this->config['site_subtitle'],
             'site_url' => rtrim($this->config['site_url'], "/\\"),
@@ -316,33 +329,27 @@ class Controller {
             'sitemap_changefreq' => $this->config['sitemap_changefreq'],
             'path' => $path,
             'theme_path' => '/views/themes/' . $this->config['theme']
-        );
+        ];
     }
 
-    /**
-     * Create Twig options
-     * 
-     * @return array twig options
-     */
-    private function createTwigOptions(): array {
-        return array(
-            'autoescape' => false,
-            'cache' => $this->config['twig_enable_cache'] ? $this->env['root_path'] . '/cache/twig' : false,
-            'debug' => $this->config['twig_enable_debug']
-        );
-    }
 
     /**
      * Get complemented image url
      * 
      * @param string $source_image_url source image url
+     * @return string image url
      */
-    private function getComplementedImageUrl(string $source_image_url = null) {
-        $image_url = $source_image_url;
+    private function getComplementedImageUrl(?string $source_image_url): string {
+            $image_url = $source_image_url;
         if (is_null($image_url) !== false || $image_url === '') {
             $image_url = $this->config['site_image_path'];
         }
-        if (is_null($image_url) === false && mb_ereg_match('^https?:', $image_url) === false) {
+        if (is_null($image_url) === false
+        && mb_ereg_match('^https?:', $image_url) === false
+        && mb_ereg_match('^//', $image_url) === false) {
+            if ($image_url[0] !== '/') {
+                $image_url = '/' . $image_url;
+            }
             $image_url = $this->config['site_url'] . $image_url;
         }
         return $image_url;
@@ -356,14 +363,14 @@ class Controller {
      * @return array subset info
      */
     private function makeSubsetInfo(SubsetInfo $subset_info, string $target_text): array {
-        $vars = array(
+        $vars = [
             'image_url' => $this->getComplementedImageUrl($this->config['site_image_path'])
-        );
+        ];
 
         if ($subset_info->type === 'main_contents') {
             if (count($subset_info->subset->part) === 0) {
                 $vars['update_time'] = new DateTime('now');
-                $vars[$subset_info->type] = array();
+                $vars[$subset_info->type] = [];
             }
             else {
                 $vars['update_time'] = current($subset_info->subset->part)->getLastUpdateTime();
@@ -374,7 +381,7 @@ class Controller {
             }
             $vars['has_following'] = $subset_info->subset->hasFollowing;
         }
-        else if ($subset_info->type === 'tag_set') {
+        elseif ($subset_info->type === 'tag_set') {
             $vars[$subset_info->type] = $subset_info->subset;
             $vars['has_following'] = false;
         }
@@ -393,7 +400,7 @@ class Controller {
      * @param string $target_text target text
      * @param TargetContainer $info content information to set
      */
-    private function setSupportContentsToTwigVars(string $content_path, string $target_contents, string $target_to_set, string $target_text, TargetContainer $info) {
+    private function setSupportContentsToTwigVars(string $content_path, string $target_contents, string $target_to_set, string $target_text, TargetContainer $info): void {
         assert($content_path !== '');
         assert($target_text !== '');
 
@@ -427,10 +434,53 @@ class Controller {
      * @return array link info
      */
     private function createLinkInfo(ContentInfo $info): array {
-        return array(
+        return [
             'path' => $info->path,
             'title' => $info->content->getTitle($this->getLang())
-        );
+        ];
+    }
+
+    /**
+     * Make structured data
+     * 
+     * @param Content $content content
+     * @param array $twig_vars twig vars
+     * @param string $image_url image url
+     * @return array Structured data collection
+     */
+    private function makeStructuredData(Content $content, array $twig_vars, string $image_url): array {
+        $structured_data = [];
+
+        $renderer = new StructuredDataRenderer($this->config, $this->env, $twig_vars);
+        $types = [];
+        foreach ($content->getStructuredDataInfo() as $data) {
+            $translated = [ 'image_url' => $image_url ];
+            foreach ($data as $data_key => $data_value) {
+                $snake_case_key = ltrim(mb_strtolower(mb_ereg_replace('[A-Z]', '_\0', $data_key)), '_');
+                $translated[$snake_case_key] = $data_value;
+            }
+            if (array_key_exists($translated['type'], $types) === false) {
+
+            }
+            $structured_data[] = "<script type=\"application/ld+json\">\n"
+                                . $renderer->render($translated)
+                                . "</script>\n";
+        }
+        if (array_key_exists('common_contents_structured_data_types', $this->config) !== false) {
+            $common_types = $this->config['common_contents_structured_data_types'];
+            foreach ($common_types as $type) {
+                if (array_key_exists($type, $types) === false) {
+                    $structured_data[] = "<script type=\"application/ld+json\">\n"
+                    . $renderer->render([
+                        'type' => $type,
+                        'image_url' => $image_url
+                    ])
+                    . "\n</script>";
+                }
+            }
+        }
+
+        return $structured_data;
     }
 
     /**
@@ -446,7 +496,7 @@ class Controller {
         assert($target_text !== '');
 
         $translated = $this->translateContent($content_path, $info->target->content, false, $target_text);
-        $translated['body'] = $info->target->content->getTranslatedBody($this->getLang());
+        $translated['body'] = self::escapeMustaches($info->target->content->getTranslatedBody($this->getLang()));
         if (is_null($info->prev) === false) {
             $translated['prev'] = $this->createLinkInfo($info->prev);
         }
@@ -455,20 +505,22 @@ class Controller {
         }
 
         $related_contents = $this->provider->getRelatedContentsOf($info->target->content, $this->getMaxRelatedContentsCount());
-        $related_contents_info = array();
-        foreach($related_contents as $related_content) {
+        $related_contents_info = [];
+        foreach ($related_contents as $related_content) {
             $related_contents_info[] = $this->createLinkInfo($related_content);
         }
 
-        return array(
+        $image_url = $this->getComplementedImageUrl($info->target->content->getRepresentationImageSource());
+        return [
             'create_time' => $info->target->content->getDateAndTime(),
             'update_time' => $info->target->content->getLastUpdateTime(),
             'tags' => $info->target->content->getTags(),
-            'main_contents' => array($translated),
-            'image_url' => $this->getComplementedImageUrl($info->target->content->getRepresentationImageSource()),
+            'main_contents' => [ $translated ],
+            'image_url' => $image_url,
             'exclude_from_list' => ($info->target->content->canListUp() === false),
-            'related_contents' => $related_contents_info
-        );
+            'related_contents' => $related_contents_info,
+            'structured_data' => $this->makeStructuredData($info->target->content, $this->twig_vars, $image_url)
+        ];
     }
 
     /**
@@ -481,18 +533,9 @@ class Controller {
         assert(0 < count($twig_vars));
         assert($template_name !== '');
 
-        $themes_path = $this->env['root_path'] . $twig_vars['theme_path'];
-        if (file_exists($themes_path . '/' .$template_name) === false) {
-            $themes_path = $this->env['root_path'] . '/views';
-            if (file_exists($themes_path . '/' .$template_name) === false) {
-                throw new Exception('Template is not exist: ' . $template_name);
-            }
-        }
-
-        $loader = new Twig_Loader_Filesystem($themes_path);
-        $twig = new Twig_Environment($loader, $this->createTwigOptions());
-        $twig->addExtension(new Twig_Extension_Debug());
+        $loader = $this->createTwigLoader($template_name, $this->env['root_path'], $twig_vars['theme_path']);
+        $options = $this->createTwigOptions($this->config, $this->env);
+        $twig = $this->createTwig($loader, $options);
         return $twig->render($template_name, $twig_vars);
     }
 }
-?>

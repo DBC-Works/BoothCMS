@@ -1,11 +1,18 @@
 <?php
+/**
+ * Contents classes
+ *
+ * @copyright D.B.C.
+ * @license https://opensource.org/licenses/mit-license.html MIT License
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../vendor/mustangostang/spyc/Spyc.php';
 
 /**
  * PartOfContent
  */
-class PartOfContent {
+final class PartOfContent
+{
     public $part;
     public $hasFollowing = false;
 }
@@ -13,7 +20,8 @@ class PartOfContent {
 /**
  * Content
  */
-class Content {
+final class Content
+{
     private static $parser;
 
     /**
@@ -23,7 +31,7 @@ class Content {
      * @return array headers;
      */
     private static function parseCommentHeader(string $header_text): array {
-        $headers = array();
+        $headers = [];
         $header_lines = mb_split("[\r\n]+", mb_substr($header_text, 2));
         foreach ($header_lines as $line) {
             if ($line !== '') {
@@ -49,8 +57,8 @@ class Content {
         if (count($parts) === 1) {
             $body = trim($parts[0]);
         }
-        else if (1 < count($parts)){
-            $body = array();
+        elseif (1 < count($parts)){
+            $body = [];
             if (is_array($title) !== false) {
                 $index = 0;
                 foreach ($title as $key => $value) {
@@ -89,14 +97,14 @@ class Content {
             if (count($parts) !== 2) {
                 throw new Exception('Invalid content: ' + $content_file_path);
             }
-            $headers = Content::parseCommentHeader($parts[0]);
+            $headers = self::parseCommentHeader($parts[0]);
             $body = trim($parts[1]);
         }
         else {
             // YAML style header document
             $parts = mb_split("[\r\n]+\.\.\.[\r\n]+", $content);
             $headers = Spyc::YAMLLoadString(array_shift($parts));
-            $body = Content::parseYamlBody($parts, array_key_exists('Title', $headers) ? $headers['Title'] : null);
+            $body = self::parseYamlBody($parts, array_key_exists('Title', $headers) ? $headers['Title'] : null);
         }
 
         if (array_key_exists('Tags', $headers)) {
@@ -106,7 +114,7 @@ class Content {
             }
         }
         else {
-            $headers['Tags'] = array();
+            $headers['Tags'] = [];
         }
 
         return new Content($headers, new DateTime('@' . filemtime($content_file_path)), $body);
@@ -132,7 +140,7 @@ class Content {
         $this->last_update_time = $last_update_time;
         $this->body = $body;
 
-        $this->translatedBody = array();
+        $this->translatedBody = [];
     }
 
     /**
@@ -285,12 +293,11 @@ class Content {
     /**
      * Author
      * 
-     * @param string $lang language
-     * @return bool
+     * @param string|null $lang language
+     * @return string
      */
     public function getAuthor(string $lang = null): string {
         assert($this->hasAuthor());
-
         return $this->getTargetValueFrom($this->getValueOf('Author', true), $lang);
     }
 
@@ -309,9 +316,8 @@ class Content {
      * 
      * @return string|null
      */
-    public function getCategory() {
+    public function getCategory(): ?string {
         assert($this->hasCategory());
-
         return $this->getTargetValueFrom($this->getValueOf('Category', true), null);
     }
 
@@ -327,12 +333,11 @@ class Content {
     /**
      * Description
      * 
-     * @param string $lang language
-     * @return bool
+     * @param string|null $lang language
+     * @return string
      */
     public function getDescription(string $lang = null): string {
         assert($this->hasDescription());
-
         return $this->getTargetValueFrom($this->getValueOf('Description', true), $lang);
     }
 
@@ -359,10 +364,10 @@ class Content {
      * Get specified header value
      * 
      * @param string $header_name language
-     * @param string $lang language
-     * @return string|null
+     * @param string|null $lang language
+     * @return string|null header value
      */
-    public function getHeaderValueOf(string $header_name, string $lang = null) {
+    public function getHeaderValueOf(string $header_name, string $lang = null): ?string {
         return $this->getTargetValueFrom($this->getValueOf($header_name, false), $lang);
     }
 
@@ -371,7 +376,7 @@ class Content {
      * 
      * @return string|null
      */
-    public function getRepresentationImageSource() {
+    public function getRepresentationImageSource(): ?string {
         if ($this->hasHeader('RepresentationImage')) {
             return $this->getValueOf('RepresentationImage', true);
         }
@@ -379,7 +384,7 @@ class Content {
         $xml_string = 0 < count($this->translatedBody)
                     ? current($this->translatedBody)
                     : $this->getTranslatedBody(null);
-        $images = array();
+        $images = [];
         mb_ereg_search_init($xml_string, "<img .*?src=['\"](.+?)['\"]");
         while (mb_ereg_search()) {
             $matches = mb_ereg_search_getregs();
@@ -391,9 +396,18 @@ class Content {
     }
 
     /**
+     * Get structured data information
+     * 
+     * @return array
+     */
+    public function getStructuredDataInfo(): array {
+        return array_key_exists('StructuredData', $this->headers) ? $this->headers['StructuredData'] : [];
+    }
+
+    /**
      * Content raw body
      * 
-     * @param string $lang language
+     * @param string|null $lang language
      * @return string
      */
     public function getRawBody(string $lang = null): string {
@@ -403,16 +417,16 @@ class Content {
     /**
      * Content translated body
      * 
-     * @param string $lang language
+     * @param string|null $lang language
      * @return string
      */
     public function getTranslatedBody(string $lang = null): string {
         $key = $lang ?? 'generic';
         if (array_key_exists($key, $this->translatedBody) === false) {
-            if (is_null(Content::$parser) !== false) {
-                Content::$parser = new Parsedown();
+            if (is_null(self::$parser) !== false) {
+                self::$parser = new Parsedown();
             }
-            $this->tranlatedBody[$key] = Content::$parser->text($this->getRawBody($lang));
+            $this->tranlatedBody[$key] = self::$parser->text($this->getRawBody($lang));
         }
         return $this->tranlatedBody[$key];
     }
@@ -421,7 +435,7 @@ class Content {
      * Get beginning of content body
      * 
      * @param int $limit_lengh limit length
-     * @param string $lang language
+     * @param string|null $lang language
      * @return PartOfContent
      */
     public function getBeginningOfBody(int $limit_length, string $lang = null): PartOfContent {
@@ -466,6 +480,7 @@ class Content {
      * 
      * @param string $header_name header name
      * @param bool $required required
+     * @return mixed value
      */
     private function getValueOf(string $header_name, bool $required) {
         if (array_key_exists($header_name, $this->headers) === false) {
@@ -482,7 +497,8 @@ class Content {
      * Get value
      * 
      * @param mixed $values values
-     * @param string $lang target language
+     * @param string|null $lang target language
+     * @return mixed
      */
     private function getTargetValueFrom($values, string $lang = null) {
         if (is_string($values) || is_array($values) === false) {
@@ -491,7 +507,7 @@ class Content {
 
         $count = count($values);
         if ($count === 0) {
-            return NULL;
+            return null;
         }
 
         if ($count === 1
@@ -503,4 +519,3 @@ class Content {
         return $values[$lang];
     }
 }
-?>

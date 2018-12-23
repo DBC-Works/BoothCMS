@@ -4,6 +4,9 @@ Date: 2018-03-18
 Description: BoothCMS first preview release
 Category: Announcement
 Tags: Release,Announcement,Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
 ...
 I published a flat file CMS 'BoothCMS' first preview release on GitHub.
 

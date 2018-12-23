@@ -6,6 +6,9 @@ Tags:
   - Release
   - Announcement
   - Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
 ...
 I publish 'BoothCMS' version 0.2.1. It contains these updates:
 

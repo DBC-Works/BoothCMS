@@ -1,0 +1,12 @@
+---
+Title: Content for unit test - Content contains structured data
+Date: 2018-06-11
+Tags: 
+  - Test content
+StructuredData: 
+  - 
+    Type: BlogPosting
+...
+This content contains this sructured data.
+
+* BlogPosting

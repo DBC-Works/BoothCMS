@@ -48,6 +48,20 @@ If `yes`, the content can only be accessed directly.
 
 Representation image path to use [Open Graph protocol](http://ogp.me/).
 
+##### StructuredData
+
+Structured data information array to render. 'Type' is required and others are optional.
+
+##### SupportTarget
+
+Support target of the content.
+
+* recent-publish
+* recent-update
+* descendants
+* all
+* unused
+
 ##### Tags
 
 Tag collection of the content. Describe in CSV or [YAML sequence](http://www.yaml.org/spec/1.2/spec.html#id2797382).
@@ -78,16 +92,6 @@ Template file name to translate.
 ##### Title
 
 Title of the content.
-
-##### SupportTarget
-
-Support target of the content.
-
-* recent-publish
-* recent-update
-* descendants
-* all
-* unused
 
 #### Body
 

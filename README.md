@@ -17,3 +17,14 @@ Features
 * Built-in tag support
 * Server-side and client-side hybrid rendering
 * Tag-based related contents extraction
+* Structured data support(default support type is only 'BlogPosting')
+
+Requirements
+------------
+
+* Web server that can rewrite url
+    * Apache HTTP Server
+    * Microsoft Internet Information Service
+    * Microsoft Azure App Service Web Apps
+    * etc
+* PHP 7.2 or later
