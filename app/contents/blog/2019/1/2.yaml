@@ -1,0 +1,22 @@
+---
+Title: Version 0.4.0 release
+Date: 2019-01-02
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
+...
+I publish 'BoothCMS' version 0.4.0. It contains these updates:
+
+* Reconstruct template([#12](https://github.com/DBC-Works/BoothCMS/issues/12))
+* Add web service support
+    * Google Analytics
+    * Google custom search engine
+    * Google AdSense(automatic ads only)
+* Fix some bugs
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)

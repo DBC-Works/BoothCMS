@@ -2,60 +2,28 @@
 {% set fmt_iso8601_date = 'Y-m-d' %}
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" {% if lang %}lang="{{ lang }}" xml:lang="{{ lang }}" {% endif %}>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:gcse="uri:google-did-not-provide-a-real-ns"
+  {% if lang %}lang="{{ lang }}" xml:lang="{{ lang }}" {% endif %}
+>
 <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="alternate" href="{{ site_url }}/feed" type="application/atom+xml" />
-  <link rel="index" href="{{ site_url }}/" />
-  <link rel="contents" href="{{ site_url }}/" />
-  <link rel="start" href="{{ site_url }}/" />
-{% if content.next %}
-  <link rel="next" href="{{ site_url }}{{ content.next.path }}" />
-{% endif %}
-{% if content.prev %}
-  <link rel="prev" href="{{ site_url }}{{ content.prev.path }}" />
-{% endif %}
-{% if author %}
-  <meta name="author" content="{{ author|e }}" />
-  <meta name="DC.creator" content="{{ author|e }}" />
-{% endif %}
-  <meta name="DC.type" content="Text" />
-{% if create_time %}
-  <meta name="DCTERMS.created" content="{{ create_time|date(fmt_iso8601_date) }}" />
-{% endif %}
-  <meta name="DCTERMS.modified" content="{{ update_time|date(fmt_iso8601_date) }}" />
-  <meta property="og:site_name" content="{{ site_title|e }}" />
-{% if title %}
-  <meta property="og:title" content="{{ title|e }}" />
-{% else %}
-  <meta property="og:title" content="{{ site_title|e }}" />
-{% endif %}
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="{{ site_url }}{{ path }}" />
-{% if image_url %}
-  <meta property="og:image" content="{{ image_url }}" />
-{% endif %}
-{% if description %}
-  <meta property="og:description" content="{{ description|e }}" />
-  <meta name="description" content="{{ description|e }}" />
-{% endif %}
-{% if tags %}
-{% autoescape %}
-  <meta name="keyword" content="{{ tags|join(',') }}" />
-{% endautoescape %}
-{% endif %}
+{% include 'SiteMetadata.html.twig' %}
+{% include 'OpenGraphProtocol.html.twig' %}
 {% if site_author_twitter %}
-  <meta property="twitter:card" content="summary" />
-  <meta property="twitter:site" content="{{ site_author_twitter }}" />
+{% include 'TwitterMetadata.html.twig' %}
 {% endif %}
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ajusa/lit@1.0.0/dist/lit.css" />
   <style>
-    .additionalContentStyle, moreButtonStyle {
+    .followingContentWrapper, .requestFollowing {
       display: none;
     }
   </style>
+{% if google_adsense_publisher_id %}
+{% include 'GoogleAdSenseAutomaticAds.html.twig' %}
+{% endif %}
   <title>{% if title %}{{ title|e }} - {% endif %}{{ site_title }}</title>
 </head>
 <body>
@@ -71,10 +39,9 @@
     </header>
     <main class="row" role="main">
       <div class="9 col">
-
 {% if main_contents %}
       <!-- Main contets -->
-      <section>
+        <section>
 {% if as_list and title %}
           <h1>{{ title|e }}</h1>
 {% endif %}
@@ -123,27 +90,27 @@
 {% endfor %}{# main_contents #}
 
 {% if has_following %}
-          <div class="card additionalContentStyle" v-bind:style="additionalContentStyle" v-for="additionalContent in additionalContents">
+          <div class="card followingContentWrapper" v-bind:style="followingContentWrapper" v-for="followingContent in followingContents">
             <article>
-              <h2>{{ '{{' }} additionalContent.title {{ '}}' }}</h2>
-              <div v-html="additionalContent.body"></div>
+              <h2>{{ '{{' }} followingContent.title {{ '}}' }}</h2>
+              <div v-html="followingContent.body"></div>
 {% if as_list %}
               <div>
-                (<a v-bind:href="siteUrl + additionalContent.path">View content</a>)
+                (<a v-bind:href="env.siteUrl + followingContent.path">View content</a>)
               </div>
 {% endif %}
-              <div v-if="0 &lt; additionalContent.tags.length">
-                <span v-for="(tag, index) in additionalContent.tags"><a v-bind:href="siteUrl + '/tags/' + encodeURIComponent(tag)">#{{ '{{' }} tag {{ '}}' }} </a>
-                  <template v-if="index &lt; additionalContent.tags.length - 1"> </template>
+              <div v-if="0 &lt; followingContent.tags.length">
+                <span v-for="(tag, index) in followingContent.tags"><a v-bind:href="env.siteUrl + '/tags/' + encodeURIComponent(tag)">#{{ '{{' }} tag {{ '}}' }} </a>
+                  <template v-if="index &lt; followingContent.tags.length - 1"> </template>
                 </span>
               </div>
 {% verbatim %}
-              <div>Publish: <time>{{ additionalContent.date }}</time> / Update: <time>{{ additionalContent.update }}</time></div>
+              <div>Publish: <time>{{ followingContent.date }}</time> / Update: <time>{{ followingContent.update }}</time></div>
 {% endverbatim %}
             </article>
           </div><!-- .card -->
-          <div class="moreButtonStyle" v-bind:style="moreButtonStyle" v-if="moreButtonVisible">
-            <button class="btn" v-on:click="onClickMore">More...</button>
+          <div class="requestFollowing" v-bind:style="requestFollowing" v-if="env.hasFollowing">
+            <button class="btn" v-on:click="onClickRequestFollowing">More...</button>
           </div>
 {% endif %}{# has_following #}
         </section>
@@ -159,7 +126,9 @@
           </ul>
         </section>
 {% endif %}{# tag_set #}
-
+{% if google_custom_search_engine_id %}
+{% include 'GoogleCustomSearchEngine.html.twig' %}
+{% endif %}
       </div><!-- .9 .col -->
 
       <!-- Support contets -->
@@ -179,18 +148,25 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
+    var baseUrl = '{{ site_url }}';
+    var asDevelop = baseUrl.indexOf('http://example.com') !== -1
+                  || baseUrl.indexOf('{{ site_url }}') !== -1 
+                  || window.location.origin.indexOf('localhost') !== -1;
     var env = {
-      siteUrl: '{{ site_url }}',
+      siteUrl: baseUrl,
       path: '{{ path }}',
-      hasFollowing: {{ has_following ? 'true' : 'false' }}
+      hasFollowing: {{ has_following ? 'true' : 'false' }},
+      asDevelop: asDevelop
+    };
+    var page = {
+      // set page specific property
     };
 
-    var script = document.createElement('script');
-    var baseUrl = env.siteUrl;
-    if (baseUrl.indexOf('http://example.com') !== -1 || window.location.origin.indexOf('localhost') !== -1) {
+    if (asDevelop) {
       var m = new RegExp('^https?:\/\/[^\/]+(.*)').exec(baseUrl);
       baseUrl = window.location.origin + m[1];
     }
+    var script = document.createElement('script');
     script.setAttribute('src', baseUrl + '/views/common/js/app.js');
     document.body.appendChild(script);
   </script>
@@ -198,6 +174,9 @@
 {% for data in structured_data %}
 {{ data }}
 {% endfor %}
+{% endif %}
+{% if google_analytics_tracking_id %}
+{% include 'GoogleAnalytics.html.twig' %}
 {% endif %}
 </body>
 </html>

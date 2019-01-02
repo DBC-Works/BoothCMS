@@ -12,6 +12,32 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 trait TemplateProcessing
 {
+    private static $COMMON_PATH = 'views/common';
+
+    /**
+     * Get template path
+     * 
+     * @param string $template_name template name
+     * @param string $root_path root path
+     * @param string $theme_path theme path
+     * @return string template path
+     */
+    private static function getTemplatePath(string $template_name, string $root_path, string $theme_path): string {
+        $template_path = '';
+        $template_path_list = [ $theme_path, self::$COMMON_PATH, 'views' ];
+        foreach ($template_path_list as $path) {
+            $check_path = $root_path . '/' . $path;
+            if (file_exists($check_path . '/' . $template_name) !== false) {
+                $template_path = $check_path;
+                break;
+            }
+        }
+        if ($template_path === '') {
+            throw new Exception('Template is not exist: ' . $template_name);
+        }
+        return $template_path;
+    }
+
     /**
      * Create Twig loader
      * 
@@ -25,20 +51,18 @@ trait TemplateProcessing
         assert(0 < count($root_path));
         assert(0 < count($theme_path));
 
-        $template_path = '';
-        $path_list = [ $theme_path, 'views/common', 'views' ];
-        foreach ($path_list as $path) {
-            $check_path = $root_path . '/' . $path;
-            if (file_exists($check_path . '/' . $template_name) !== false) {
-                $template_path = $check_path;
-                break;
+        $template_path = self::getTemplatePath($template_name, $root_path, $theme_path);
+        $target_path_list = [
+            $template_path
+        ];
+        $parts_path_list = [ $template_path, $root_path . '/' . self::$COMMON_PATH ];
+        foreach ($parts_path_list as $parts_path) {
+            $check_path = $parts_path. '/twig-parts';
+            if (file_exists($check_path) !== false) {
+                $target_path_list[] = $check_path;
             }
         }
-        if ($template_path === '') {
-            throw new Exception('Template is not exist: ' . $template_name);
-        }
-
-        return new Twig_Loader_Filesystem($template_path);
+        return new Twig_Loader_Filesystem($target_path_list);
     }
 
     /**
@@ -81,7 +105,7 @@ trait TemplateProcessing
      * @return string escaped string
      */
     private static function escapeMustaches(string $value): string {
-        return mb_ereg_replace('{{', '\u007b{', mb_ereg_replace('{{{', '\u007b\u007b{', $value));
+        return mb_ereg_replace('{{', '{&#8203;{', mb_ereg_replace('{{{', '{&#8203;{&#8203;{', $value));
     }
 }
 

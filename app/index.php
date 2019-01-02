@@ -32,9 +32,17 @@ final class BoothCmsApp {
      * Render
      */
     public function render() {
-        $env = array();
-        $env['root_path'] = realpath(__DIR__);
-        $env['lang'] = $this->getLang();
+        $remote_addr = $this->server_vars['REMOTE_ADDR'];
+        $env = [
+            'root_path' => realpath(__DIR__),
+            'lang' => $this->getLang(),
+            /*
+            'as_develop' => (0 <= mb_strpos($this->config['sitr_url'], 'example.com')
+                        || $remote_addr === '::1'
+                        || $remote_addr === '127.0.0.1')
+             */
+            'as_develop' => false
+        ];
 
         $content_path = '';
         if (array_key_exists('REQUEST_URI', $this->server_vars) !== false

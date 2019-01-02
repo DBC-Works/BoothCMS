@@ -15,7 +15,7 @@ $config['site_url'] = 'http://example.com';
 // Site author
 $config['site_author'] = 'D.B.C.';
 // Site description
-$config['site_description'] = 'BoothCMS is a simple Flat file CMS.';
+$config['site_description'] = 'BoothCMS is a simple flat file CMS.';
 // Site author twitter account
 $config['site_author_twitter'] = '@example';
 
@@ -36,7 +36,7 @@ $config['timezone'] = 'UTC';
 //
 
 // Default site representation image path(to use [Open Graph protocol](http://ogp.me/)).
-$config['site_image_path'] = "/views/themes/default/BoothCMS-logo-400x200.png";
+$config['site_image_path'] = '/views/themes/default/BoothCMS-logo-400x200.png';
 // Contents count per page
 $config['contents_per_page'] = 5;
 // View theme
@@ -66,6 +66,17 @@ $config['site_rfc4151_id'] = 'tag:example@example.com,2018-01-01:BoothCMS';
 // Sitemap change frequency
 // https://www.sitemaps.org/protocol.html#changefreqdef
 $config['sitemap_changefreq'] = 'monthly';
+
+//
+// Service information
+//
+
+// Google Analytics tracking id
+// $config['google_analytics_tracking_id'] = '';
+// Google AdSense publisher id
+// $config['google_adsense_publisher_id'] = '';
+// Google custom search engine id
+// $config['google_custom_search_engine_id'] = '';
 
 //
 // Twig settings

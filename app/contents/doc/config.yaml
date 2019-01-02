@@ -107,6 +107,28 @@ Set sitemap change frequency. See [&lt;changefreq&gt;](https://www.sitemaps.org/
 * yearly
 * never
 
+### Service information
+
+#### google_analytics_tracking_id
+
+Set your Google Analytics tracking id if you want to use Google Analytics.
+
+#### google_custom_search_engine_id
+
+Set your Google custom search engine id if you want to use Google custom search engine.
+
+You also have to place this include in your template where you want both of the search box and the search results to render:
+
+```
+{% if google_custom_search_engine_id %}
+{% include 'GoogleCustomSearchEngine.html.twig' %}
+{% endif %}
+```
+
+#### google_adsense_publisher_id
+
+Set your Google AdSense publisher id if you want to show Google AdSense automatic ads.
+
 ### Twig setting
 
 #### twig_enable_cache

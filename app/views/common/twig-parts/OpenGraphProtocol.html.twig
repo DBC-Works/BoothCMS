@@ -1,0 +1,14 @@
+  <meta property="og:site_name" content="{{ site_title|e }}" />
+{% if title %}
+  <meta property="og:title" content="{{ title|e }}" />
+{% else %}
+  <meta property="og:title" content="{{ site_title|e }}" />
+{% endif %}
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{ site_url }}{{ path }}" />
+{% if image_url %}
+  <meta property="og:image" content="{{ image_url }}" />
+{% endif %}
+{% if description %}
+  <meta property="og:description" content="{{ description|e }}" />
+{% endif %}

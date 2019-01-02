@@ -14,10 +14,10 @@ $html_string = $controller->render('/escape-double-mustaches');
 // echo $html_string . "\n";
 $html = new SimpleXMLElement($html_string);
 foreach ($html->body->p as $p) {
-    echo $p . "\n";
+    echo mb_convert_encoding($p, 'HTML-ENTITIES') . "\n";
 }
 ?>
 --EXPECT--
-BoothCMS escapes double mustaches('\u007b{').
-BoothCMS also escapes triple mustaches('\u007b\u007b{').
-BoothCMS also escapes quadruple mustaches('\u007b\u007b\u007b{').
+BoothCMS escapes double mustaches('{&#8203;{').
+BoothCMS also escapes triple mustaches('{&#8203;{&#8203;{').
+BoothCMS also escapes quadruple mustaches('{&#8203;{&#8203;{&#8203;{').

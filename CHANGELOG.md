@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+Version 0.4.0(2019-01-02)
+-------------------------
+
+* Reconstruct template(#12)
+* Add web service support
+    * Google Analytics
+    * Google custom search engine
+    * Google AdSense(automatic ads only)
+* Fix some bugs
+
 Version 0.3.0(2018-12-23)
 -------------------------
 

@@ -319,7 +319,7 @@ final class Controller
     private function createBasicTwigArgs(string $path): array {
         assert($path !== '');
 
-        return [
+        $twig_vars = [
             'site_title' => $this->config['site_title'],
             'site_subtitle' => $this->config['site_subtitle'],
             'site_url' => rtrim($this->config['site_url'], "/\\"),
@@ -330,6 +330,23 @@ final class Controller
             'path' => $path,
             'theme_path' => '/views/themes/' . $this->config['theme']
         ];
+        if ($this->env['as_develop'] === false) {
+            $keys = [
+                'google_analytics_tracking_id',
+                'google_adsense_publisher_id',
+                'google_custom_search_engine_id'
+            ];
+            foreach ($keys as $key) {
+                if (array_key_exists($key, $this->config)
+                && is_null($this->config[$key]) === false) {
+                    $value = $this->config[$key];
+                    if ($value) {
+                        $twig_vars[$key] = $value;
+                    }
+                }
+            }
+        }
+        return $twig_vars;
     }
 
 
@@ -460,16 +477,16 @@ final class Controller
                 $translated[$snake_case_key] = $data_value;
             }
             if (array_key_exists($translated['type'], $types) === false) {
-
+                $structured_data[] = "<script type=\"application/ld+json\">\n"
+                . $renderer->render($translated)
+                . "\n</script>\n";
+                $types[] = $translated['type'];
             }
-            $structured_data[] = "<script type=\"application/ld+json\">\n"
-                                . $renderer->render($translated)
-                                . "</script>\n";
         }
         if (array_key_exists('common_contents_structured_data_types', $this->config) !== false) {
             $common_types = $this->config['common_contents_structured_data_types'];
             foreach ($common_types as $type) {
-                if (array_key_exists($type, $types) === false) {
+                if (in_array($type, $types) === false) {
                     $structured_data[] = "<script type=\"application/ld+json\">\n"
                     . $renderer->render([
                         'type' => $type,

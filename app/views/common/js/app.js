@@ -1,21 +1,23 @@
 var vm = new Vue({
   el: '#app',
   data: {
-    siteUrl: env.siteUrl,
-    additionalContentStyle: {
+    env: env,
+    page: page ? page : {},
+
+    followingContentWrapper: {
       display: 'none'
     },
-    moreButtonStyle: {
+    requestFollowing: {
       display: 'none'
     },
+
     nextPageIndex: 1,
-    moreButtonVisible: env.hasFollowing,
-    additionalContents: []
+    followingContents: []
   },
   mounted: function() {
-    this.additionalContentStyle.display = this.moreButtonStyle.display = 'block';
-    if (0 <= this.siteUrl.indexOf('http://example.com') || 0 <= window.location.origin.indexOf('localhost')) {
-      this.correctHostname(this.siteUrl);
+    this.followingContentWrapper.display = this.requestFollowing.display = 'block';
+    if (this.env.asDevelop) {
+      this.correctHostname(this.env.siteUrl);
     }
   },
   methods: {
@@ -31,18 +33,18 @@ var vm = new Vue({
     correctHostname: function(target) {
       var m = new RegExp('^https?:\/\/[^\/]+(.*)').exec(target);
       var modifiedUrl = window.location.origin + m[1];
-      this.correctElementHostname('link', this.siteUrl, modifiedUrl);
-      this.correctElementHostname('a', this.siteUrl, modifiedUrl);
-      this.siteUrl = modifiedUrl;
+      this.correctElementHostname('link', this.env.siteUrl, modifiedUrl);
+      this.correctElementHostname('a', this.env.siteUrl, modifiedUrl);
+      this.env.siteUrl = modifiedUrl;
     },
-    onClickMore: function(e) {
-      var url = this.siteUrl + '/following/' + this.nextPageIndex + env.path;
+    onClickRequestFollowing: function(e) {
+      var url = this.env.siteUrl + '/following/' + this.nextPageIndex + this.env.path;
       var self = this;
       axios.get(url)
       .then(function (response) {
         if (response.data.contents) {
-          self.moreButtonVisible = response.data.hasFollowing;
-          self.additionalContents = self.additionalContents.concat(response.data.contents);
+          self.env.hasFollowing = response.data.hasFollowing;
+          self.followingContents = self.followingContents.concat(response.data.contents);
           ++(self.nextPageIndex);
         } else {
           console.error(response.data);

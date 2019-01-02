@@ -18,6 +18,10 @@ Features
 * Server-side and client-side hybrid rendering
 * Tag-based related contents extraction
 * Structured data support(default support type is only 'BlogPosting')
+* Built-in web service support
+    * Google Analytics
+    * Google custom search engine
+    * Google AdSense(automatic ads only)
 
 Requirements
 ------------

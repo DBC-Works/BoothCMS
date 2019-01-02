@@ -1,0 +1,27 @@
+  <link rel="alternate" href="{{ site_url }}/feed" type="application/atom+xml" />
+  <link rel="index" href="{{ site_url }}/" />
+  <link rel="contents" href="{{ site_url }}/" />
+  <link rel="start" href="{{ site_url }}/" />
+{% if content.next %}
+  <link rel="next" href="{{ site_url }}{{ content.next.path }}" />
+{% endif %}
+{% if content.prev %}
+  <link rel="prev" href="{{ site_url }}{{ content.prev.path }}" />
+{% endif %}
+{% if author %}
+  <meta name="author" content="{{ author|e }}" />
+{% if description %}
+  <meta name="description" content="{{ description|e }}" />
+{% endif %}
+{% if tags %}
+{% autoescape %}
+  <meta name="keyword" content="{{ tags|join(',') }}" />
+{% endautoescape %}
+{% endif %}
+  <meta name="DC.creator" content="{{ author|e }}" />
+{% endif %}
+  <meta name="DC.type" content="Text" />
+{% if create_time %}
+  <meta name="DCTERMS.created" content="{{ create_time|date(fmt_iso8601_date) }}" />
+{% endif %}
+  <meta name="DCTERMS.modified" content="{{ update_time|date(fmt_iso8601_date) }}" />
