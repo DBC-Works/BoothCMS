@@ -31,7 +31,23 @@ Set site description.
 
 #### site_author_twitter
 
-Set Twitter account of site author.
+Set Twitter account of site author(without `@`).
+
+If you want to use tweet control, place this [`include` statement](https://twig.symfony.com/doc/2.x/tags/include.html) in your template where you want to render:
+
+```
+{% if site_author_twitter %}
+{% include 'TwitterTweetControl.html.twig' %}
+{% endif %}
+```
+
+If you want to use tweet timeline, place this [`include` statement](https://twig.symfony.com/doc/2.x/tags/include.html) in your template where you want to render:
+
+```
+{% if site_author_twitter %}
+{% include 'TwitterTimelineControl.html.twig' %}
+{% endif %}
+```
 
 ### Environment
 
@@ -89,6 +105,8 @@ Set max related contents count(default: 5).
 
 Set structured data type array to render every contents(only 'BlogPosting' can be set).
 
+If you want to set other type, please create a corresponding template file named `StructredData-{type}.json` in the `theme` directory.
+
 ### Site metadata
 
 #### site_rfc4151_id
@@ -117,7 +135,7 @@ Set your Google Analytics tracking id if you want to use Google Analytics.
 
 Set your Google custom search engine id if you want to use Google custom search engine.
 
-You also have to place this include in your template where you want both of the search box and the search results to render:
+You also have to place this [`include` statement](https://twig.symfony.com/doc/2.x/tags/include.html) in your template where you want both of the search box and the search results to render:
 
 ```
 {% if google_custom_search_engine_id %}

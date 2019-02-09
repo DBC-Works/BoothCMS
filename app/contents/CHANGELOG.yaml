@@ -7,6 +7,14 @@ Category: Software
 Tags: Log
 */
 
+### Version 0.4.1(2019-02-09)
+
+* Replace `$_SERVER` super global variable reference with `filter_input` function([#13](https://github.com/DBC-Works/BoothCMS/issues/13))
+* Add web service support
+    * Twitter timeline
+    * Twitter tweet control
+* Update documents a bit
+
 ### Version 0.4.0(2019-01-02)
 
 * Reconstruct template([#12](https://github.com/DBC-Works/BoothCMS/issues/12))

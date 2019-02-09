@@ -1,6 +1,6 @@
 ---
 # Content title(required)
-Title: 'BoothCMS: a simple Flat file CMS'
+Title: 'BoothCMS: a simple flat file CMS'
 # Content author(optional)
 #Author: Sad Juno
 # Date(optional; ISO 8601)
@@ -10,7 +10,7 @@ DateAndTime: 2999-12-31T23:59:59
 # representation image to use OGP(optional)
 #RepresentationImage: /image.jpg
 # Content description(optional)
-Description: BoothCMS is a simple Flat file CMS.
+Description: BoothCMS is a simple flat file CMS.
 # Category(optional; please select value from Wordnet Vocabulary(http://xmlns.com/2001/08/wordnet/))
 Category: Software
 # Tag(optional; format is CSV)
@@ -19,7 +19,7 @@ Tags: Summary
 
 <img style="display: block; margin: 0 auto" src="/views/themes/default/BoothCMS-logo-400x200.png" alt="BoothCMS logo" />
 
-BoothCMS is a simple Flat file CMS.
+BoothCMS is a simple flat file CMS.
 
 ### Features
 

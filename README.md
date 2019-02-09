@@ -22,6 +22,8 @@ Features
     * Google Analytics
     * Google custom search engine
     * Google AdSense(automatic ads only)
+    * Twitter timeline
+    * Twitter tweet control
 
 Requirements
 ------------

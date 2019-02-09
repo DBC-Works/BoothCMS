@@ -17,7 +17,7 @@ $config['site_author'] = 'D.B.C.';
 // Site description
 $config['site_description'] = 'BoothCMS is a simple flat file CMS.';
 // Site author twitter account
-$config['site_author_twitter'] = '@example';
+$config['site_author_twitter'] = 'example';
 
 //
 // Environment

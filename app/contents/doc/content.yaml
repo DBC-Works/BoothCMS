@@ -9,13 +9,13 @@ BoothCMS's content is a compound format of [YAML](http://yaml.org/)(headers) and
 
 ```
 ---
-Title: 'BoothCMS: a simple Flat file CMS'
+Title: 'BoothCMS: a simple flat file CMS'
 DateAndTime: 2018-03-18T23:59:59
-Description: BoothCMS is a simple Flat file CMS.
+Description: BoothCMS is a simple flat file CMS.
 Category: Software
 Tags: Summary
 ..&#x2e;
-BoothCMS is a simple Flat file CMS.
+BoothCMS is a simple flat file CMS.
 ```
 
 #### Headers

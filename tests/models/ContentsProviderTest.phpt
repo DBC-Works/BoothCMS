@@ -54,8 +54,8 @@ foreach ($related_contents as $related_content) {
 ?>
 --EXPECT--
 404 is not in list: yes
-Content count: 22
-Latest content title: BoothCMS: a simple Flat file CMS
+Content count: 23
+Latest content title: BoothCMS: a simple flat file CMS
 Valid latest content date and time: yes
 Valid oldest content date and time: yes
 
@@ -71,9 +71,9 @@ Valid recent update content count: 5
 
 - Tag set
 Tag count: 10
-Release: 10(10)
-Announcement: 10(10)
-Blog: 10(10)
+Release: 11(11)
+Announcement: 11(11)
+Blog: 11(11)
 Test content: 5(5)
 Instruction: 4(4)
 Install: 3(3)
@@ -83,13 +83,14 @@ Specification: 1(1)
 License: 1(1)
 
 - index(yaml style header content)
-Title: BoothCMS: a simple Flat file CMS
+Title: BoothCMS: a simple flat file CMS
 Path: /index
 Has next: no
 Has prev: yes
 
 - related contents
 Base tags: Release Announcement Blog
+Related tags: Release Announcement Blog
 Related tags: Release Announcement Blog
 Related tags: Release Announcement Blog
 Related tags: Release Announcement Blog

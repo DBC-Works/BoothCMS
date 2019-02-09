@@ -59,13 +59,13 @@ Body(ja): 見つかりませんでした。(404)
 - index(yaml style header content)
 Can list up: yes
 Has template: no
-Title: BoothCMS: a simple Flat file CMS
+Title: BoothCMS: a simple flat file CMS
 Has author: no
 Date and time: 2999-12-31T23:59:59
 Category: Software
 Has body: yes
 Beginning of body: 
-string(96) "BoothCMS is a simple Flat file CMS. Features No database No administration function - you create"
+string(96) "BoothCMS is a simple flat file CMS. Features No database No administration function - you create"
 Beginning of body has following: yes
 
 - CHANGELOG(comment style header content)

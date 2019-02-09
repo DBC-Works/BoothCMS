@@ -113,6 +113,11 @@
             <button class="btn" v-on:click="onClickRequestFollowing">More...</button>
           </div>
 {% endif %}{# has_following #}
+{% if site_author_twitter %}
+          <div>
+            {% include 'TwitterTweetControl.html.twig' %}
+          </div>
+{% endif %}
         </section>
 {% endif %}
 

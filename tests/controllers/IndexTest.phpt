@@ -36,4 +36,4 @@ foreach ($html->xpath('//link') as $link) {
 }
 ?>
 --EXPECT--
-title: BoothCMS: a simple Flat file CMS - BoothCMS
+title: BoothCMS: a simple flat file CMS - BoothCMS

@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+Version 0.4.1(2019-02-09)
+-------------------------
+
+* Replace `$_SERVER` super global variable reference with `filter_input` function(#13)
+* Add web service support
+    * Twitter timeline
+    * Twitter tweet control
+* Update documents a bit
+
 Version 0.4.0(2019-01-02)
 -------------------------
 

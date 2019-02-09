@@ -61,3 +61,21 @@ Default template uses [lit](https://ajusa.github.io/lit/docs/lit.html) CSS frame
 
 * tag_name
 * tag_values(array(string))
+
+#### Common template parts
+
+If you want to use common template parts, place[`include` statement](https://twig.symfony.com/doc/2.x/tags/include.html) in your template where you want to and [configure related values](/doc/config).
+
+##### for head
+
+* OpenGraphProtocol.html.twig
+* SiteMetadata.html.twig
+* TwitterMetadata.html.twig
+
+##### for body
+
+* GoogleAdSenseAutomaticAds.html.twig
+* GoogleAnalytics.html.twig
+* GoogleCustomSearchEngine.html.twig
+* TwitterTimelineControl.html.twig
+* TwitterTweetControl.html.twig

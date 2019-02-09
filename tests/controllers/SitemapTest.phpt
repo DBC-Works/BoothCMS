@@ -15,4 +15,4 @@ $sitemap = new SimpleXMLElement($sitemap_string);
 echo 'Entry count: ' . count($sitemap->url) . "\n";
 ?>
 --EXPECT--
-Entry count: 22
+Entry count: 23

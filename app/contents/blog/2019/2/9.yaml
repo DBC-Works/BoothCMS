@@ -1,0 +1,21 @@
+---
+Title: Version 0.4.1 release
+Date: 2019-02-09
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
+...
+I publish 'BoothCMS' version 0.4.1. It contains these updates:
+
+* Replace `$_SERVER` super global variable reference with `filter_input` function([#13](https://github.com/DBC-Works/BoothCMS/issues/13))
+* Add web service support
+    * Twitter timeline
+    * Twitter tweet control
+* Update documents a bit
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)
