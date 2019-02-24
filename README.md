@@ -17,7 +17,8 @@ Features
 * Built-in tag support
 * Server-side and client-side hybrid rendering
 * Tag-based related contents extraction
-* Structured data support(default support type is only 'BlogPosting')
+* Structured data support
+    * Default support types are 'BlogPosting' and 'Review'(`Book` and `Thing`)
 * Built-in web service support
     * Google Analytics
     * Google custom search engine

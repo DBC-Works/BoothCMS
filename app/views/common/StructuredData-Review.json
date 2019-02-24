@@ -1,0 +1,48 @@
+{% set fmt_iso8601_date = 'Y-m-d' %}
+{
+  "@context": "http://schema.org",
+  "@type": "Review",
+  "description": "{{ description | slice(0, 200) }}",
+  "author": {
+    "name": "{{ author }}",
+    "sameAs": "{{ site_url }}"
+  },
+  "url": "{{ site_url }}{{ path }}",
+  "datePublished": "{{ create_time|date(fmt_iso8601_date) }}",
+  "dateModified": "{{ update_time|date(fmt_iso8601_date) }}",
+  "headline": "{{ title }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site_author }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site_url }}{{ site_image_path }}"
+    }
+  },
+{% if review_rating_value %}
+  "reviewRating": {
+    "@type": "Rating",
+    "ratingValue": {{ review_rating_value }}
+  },
+{% endif %}
+  "itemReviewed": {
+{% if item_reviewed_isbn %}
+    "@type": "Book",
+    "isbn": "{{ item_reviewed_isbn }}",
+{% elseif item_reviewed_type %}
+    "@type": "{{ item_reviewed_type }}",
+{% else %}
+    "@type": "Thing",
+{% endif %}
+{% if item_reviewed_author_name %}
+    "author": {
+      "name": "{{ item_reviewed_author_name }}",
+      "sameAs": "{{ item_reviewed_author_same_as }}"
+    },
+{% endif %}
+{% if item_reviewed_same_as %}
+    "sameAs": "{{ item_reviewed_same_as }}",
+{% endif %}
+    "name": "{{ item_reviewed_name }}"
+  }
+}

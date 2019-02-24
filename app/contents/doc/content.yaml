@@ -4,11 +4,13 @@ DateAndTime: 2018-03-18T10:00:00
 Description: Content format of BoothCMS
 Category: Instruction
 Tags: Specification,Instruction
-...
-BoothCMS's content is a compound format of [YAML](http://yaml.org/)(headers) and [Markdown](https://learn.getgrav.org/content/markdown)(body). Headers are before three dots(`...`), body is after three dots. Extension of content file must set 'yaml' or 'yml'.
+---
+BoothCMS's content is a compound format of [YAML](http://yaml.org/)(headers) and [Markdown](https://learn.getgrav.org/content/markdown)(body). Headers are before delimiter string(three dots(`...`) or three dashes(`---`)), body is after delimiter string. Extension of content file must set 'yaml', 'yml' or 'md'.
+
+(If you want to check the content preview with [Visual Studio Code](https://code.visualstudio.com/), set file extension to '.md' and use three dashes(`---`) as a delimiter string instead of three dots(`...`))
 
 ```
----
+--&#x2d;
 Title: 'BoothCMS: a simple flat file CMS'
 DateAndTime: 2018-03-18T23:59:59
 Description: BoothCMS is a simple flat file CMS.
@@ -51,6 +53,10 @@ Representation image path to use [Open Graph protocol](http://ogp.me/).
 ##### StructuredData
 
 Structured data information array to render. 'Type' is required and others are optional.
+
+Refer to [template files](https://github.com/DBC-Works/BoothCMS/tree/master/app/views/common) for the default support type and specification variables(The variable name of the snake case must be converted to the upper camel case).
+
+The value of omitted variables are compensated from other header, configuration and environment.
 
 ##### SupportTarget
 
@@ -95,6 +101,6 @@ Title of the content.
 
 #### Body
 
-If you omit `Target` header, you can write content body after three dots(...). You can mark up text with [MarkdownExtra](https://michelf.ca/projects/php-markdown/extra/).
+If you omit `Target` header, you can write content body after delimiter string(three dots(`...`) or three dashes(`---`)). You can mark up text with [MarkdownExtra](https://michelf.ca/projects/php-markdown/extra/).
 
-The only three dots line is invalid. If you want to write, replace character to "&amp;#x2e;".
+The only delimiter string line is invalid. If you want to write, replace character to "&amp;#x2e;"(for three dots) or "&amp;#x2d;"(for three dashes).

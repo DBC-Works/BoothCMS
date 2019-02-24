@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+Version 0.4.2(2019-02-24)
+-------------------------
+
+* Update content parse process to consider three dashes(`---`) as delimiter string(#14)
+    * If you want to check the content preview with [Visual Studio Code](https://code.visualstudio.com/), set file extension to '.md' and use three dashes(`---`) as a delimiter string instead of three dots(`...`)
+* Add '[Review](https://developers.google.com/search/docs/data-types/review-snippet)' structured data template
+    * Support types are `Book` and `Thing`
+
 Version 0.4.1(2019-02-09)
 -------------------------
 

@@ -7,6 +7,13 @@ Category: Software
 Tags: Log
 */
 
+### Version 0.4.2(2019-02-14)
+
+* Update content parse process to consider three dashes(`---`) as delimiter string([#14](https://github.com/DBC-Works/BoothCMS/issues/14))
+    * If you want to check the content preview with [Visual Studio Code](https://code.visualstudio.com/), set file extension to '.md' and use three dashes(`---`) as a delimiter string instead of three dots(`...`)
+* Add '[Review](https://developers.google.com/search/docs/data-types/review-snippet)' structured data template
+    * Support types are `Book` and `Thing`
+
 ### Version 0.4.1(2019-02-09)
 
 * Replace `$_SERVER` super global variable reference with `filter_input` function([#13](https://github.com/DBC-Works/BoothCMS/issues/13))

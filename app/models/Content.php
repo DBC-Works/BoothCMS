@@ -102,9 +102,19 @@ final class Content
         }
         else {
             // YAML style header document
-            $parts = mb_split("[\r\n]+\.\.\.[\r\n]+", $content);
-            $headers = Spyc::YAMLLoadString(array_shift($parts));
-            $body = self::parseYamlBody($parts, array_key_exists('Title', $headers) ? $headers['Title'] : null);
+            while (mb_strpos($content, '#') === 0) {
+                $content = mb_ereg_replace("^#[^\r\n]*[\r\n]+", '', $content);
+            }
+            $delimiter = self::detectDelimiterString($content);
+            if ($delimiter !== null) {
+                $parts = mb_split(self::detectDelimiterString($content), $content);
+                $headers = Spyc::YAMLLoadString(array_shift($parts));
+                $body = self::parseYamlBody($parts, array_key_exists('Title', $headers) ? $headers['Title'] : null);
+            }
+            else {
+                $headers = Spyc::YAMLLoadString($content);
+                $body = '';
+            }
         }
 
         if (array_key_exists('Tags', $headers)) {
@@ -118,6 +128,35 @@ final class Content
         }
 
         return new Content($headers, new DateTime('@' . filemtime($content_file_path)), $body);
+    }
+
+    /**
+     * 
+     * Detect content delimiter string
+     *
+     * @param string $content content
+     * @return string|null delimiter string(null if content is only headers)
+     */
+    public static function detectDelimiterString(string $content): ?string {
+        $re_end_of_doc_marker = "[\r\n]+\.\.\.[\r\n]+";
+        $re_directive_separator = "[\r\n]+---[\r\n]+";
+
+        mb_ereg_search_init($content);
+        $end_of_doc_marker_info = mb_ereg_search_pos($re_end_of_doc_marker);
+        mb_ereg_search_setpos(0);
+        $directive_separator_info = mb_ereg_search_pos($re_directive_separator);
+        if ($end_of_doc_marker_info === false && $directive_separator_info === false) {
+            return null;
+        }
+        if (is_array($end_of_doc_marker_info) !== false && $directive_separator_info === false) {
+            return $re_end_of_doc_marker;
+        }
+        if ($end_of_doc_marker_info === false && is_array($directive_separator_info)) {
+            return $re_directive_separator;
+        }
+        return $end_of_doc_marker_info[0] < $directive_separator_info[0]
+                ? $re_end_of_doc_marker
+                : $re_directive_separator;
     }
 
     private $headers;
@@ -411,7 +450,15 @@ final class Content
      * @return string
      */
     public function getRawBody(string $lang = null): string {
-        return mb_ereg_replace('&#x2e;', '.', $this->getTargetValueFrom($this->body, $lang));
+        $numeric_char_references = [
+            '&#x2d;' => '-',
+            '&#x2e;' => '.'
+        ];
+        $body = $this->getTargetValueFrom($this->body, $lang);
+        foreach ($numeric_char_references as $key => $value) {
+            $body = mb_ereg_replace($key, $value, $body);
+        }
+        return $body;
     }
 
     /**

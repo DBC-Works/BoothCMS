@@ -27,6 +27,12 @@ echo "Beginning of body: \n";
 var_dump($part->part);
 echo 'Beginning of body has following: ' . ($part->hasFollowing ? 'yes' : 'no') . "\n";
 
+echo "\n- content(yaml style header content separated by three dashes)\n";
+$yamlContent = Content::load(__DIR__ . '/../../app/contents/doc/content.yaml');
+echo 'Can list up: ' . ($yamlContent->canListUp() ? 'yes' : 'no') . "\n";
+echo 'Has template: ' . ($yamlContent->hasTemplate() ? 'yes' : 'no') . "\n";
+echo 'Title: ' . $yamlContent->getTitle() . "\n";
+
 echo "\n- CHANGELOG(comment style header content)\n";
 $mdContent = Content::load(__DIR__ . '/../../app/contents/CHANGELOG.yaml');
 echo 'Can list up: ' . ($mdContent->canListUp() ? 'yes' : 'no') . "\n";
@@ -67,6 +73,11 @@ Has body: yes
 Beginning of body: 
 string(96) "BoothCMS is a simple flat file CMS. Features No database No administration function - you create"
 Beginning of body has following: yes
+
+- content(yaml style header content separated by three dashes)
+Can list up: yes
+Has template: no
+Title: Content format
 
 - CHANGELOG(comment style header content)
 Can list up: yes
