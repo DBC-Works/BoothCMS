@@ -69,6 +69,26 @@ final class Controller
                 : null;
     }
 
+    /**
+     * Translate array key format from camel case to snake case
+     * 
+     * @param array $data array to translate
+     * @return array translated array
+     */
+    private static function translateCamelCaseToSnakeCase(array $data): array {
+        $translated = [];
+        foreach ($data as $data_key => $data_value) {
+            $snake_case_key = ltrim(mb_strtolower(mb_ereg_replace('[A-Z]', '_\0', $data_key)), '_');
+            if (is_array($data_value) !== false) {
+                $translated[$snake_case_key] = self::translateCamelCaseToSnakeCase($data_value);
+            }
+            else {
+                $translated[$snake_case_key] = $data_value;
+            }
+        }
+        return $translated;
+    }
+
     /** 
      * @var ContentsProvider
      */
@@ -159,7 +179,10 @@ final class Controller
                                     ? $info->target->content->getAuthor()
                                     : $this->config['site_author'];
         if ($info->target->content->hasTitle()) {
-            $this->twig_vars['title'] = $info->target->content->getTitle($this->getLang());
+            $title = $info->target->content->getTitle($this->getLang());
+            if ($title !== $this->twig_vars['site_title']) {
+                $this->twig_vars['title'] = $title;
+            }
         }
 
         $target_text = $info->target->content->hasTargetText()
@@ -471,11 +494,11 @@ final class Controller
         $renderer = new StructuredDataRenderer($this->config, $this->env, $twig_vars);
         $types = [];
         foreach ($content->getStructuredDataInfo() as $data) {
-            $translated = [ 'image_url' => $image_url ];
-            foreach ($data as $data_key => $data_value) {
-                $snake_case_key = ltrim(mb_strtolower(mb_ereg_replace('[A-Z]', '_\0', $data_key)), '_');
-                $translated[$snake_case_key] = $data_value;
+            $translated = self::translateCamelCaseToSnakeCase($data);
+            if (array_key_exists('image_url', $translated) === false) {
+                $translated['image_url'] = $image_url;
             }
+            
             if (array_key_exists($translated['type'], $types) === false) {
                 $structured_data[] = "<script type=\"application/ld+json\">\n"
                 . $renderer->render($translated)

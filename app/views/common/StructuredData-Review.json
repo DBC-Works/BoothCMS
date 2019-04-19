@@ -34,7 +34,16 @@
 {% else %}
     "@type": "Thing",
 {% endif %}
-{% if item_reviewed_author_name %}
+{% if item_reviewed_authors %}
+    "author": [
+{% for author in item_reviewed_authors %}
+      {
+        "name": "{{ author.name }}",
+        "sameAs": "{{ author.same_as }}"
+      }{% if not loop.last %},{% endif %}
+{% endfor %}
+    ],
+{% elseif item_reviewed_author_name %}
     "author": {
       "name": "{{ item_reviewed_author_name }}",
       "sameAs": "{{ item_reviewed_author_same_as }}"

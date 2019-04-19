@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+Version 0.4.3(2019-04-20)
+-------------------------
+
+* Add '[Video](https://developers.google.com/search/docs/data-types/video)' structured data template
+* Improve '[Review](https://developers.google.com/search/docs/data-types/review-snippet)' structured data template support
+* Correct title setting process
+
 Version 0.4.2(2019-02-24)
 -------------------------
 

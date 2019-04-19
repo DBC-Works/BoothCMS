@@ -1,0 +1,10 @@
+{% set fmt_iso8601_date = 'Y-m-d' %}
+{
+  "@context": "http://schema.org",
+  "@type": "VideoObject",
+  "name": "{{ video_object_name }}",
+  "description": "{{ video_object_description }}",
+  "thumbnailUrl": "{{ video_object_thumbnail_url }}",
+  "uploadDate": "{{ video_object_upload_date|date(fmt_iso8601_date) }}",
+  "contentUrl": "{{ video_object_content_url }}"
+}

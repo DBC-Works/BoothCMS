@@ -1,0 +1,19 @@
+---
+Title: Version 0.4.3 release
+Date: 2019-04-20
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
+...
+I published 'BoothCMS' version 0.4.3. It contains these updates:
+
+* Add '[Video](https://developers.google.com/search/docs/data-types/video)' structured data template
+* Improve '[Review](https://developers.google.com/search/docs/data-types/review-snippet)' structured data template support
+* Correct title setting process
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)
