@@ -2,8 +2,8 @@
 {
   "@context": "http://schema.org",
   "@type": "VideoObject",
-  "name": "{{ video_object_name }}",
-  "description": "{{ video_object_description }}",
+  "name": "{{ video_object_name|e('html') }}",
+  "description": "{{ video_object_description|e('html') }}",
   "thumbnailUrl": "{{ video_object_thumbnail_url }}",
   "uploadDate": "{{ video_object_upload_date|date(fmt_iso8601_date) }}",
   "contentUrl": "{{ video_object_content_url }}"

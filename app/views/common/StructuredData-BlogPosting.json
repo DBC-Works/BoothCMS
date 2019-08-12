@@ -2,11 +2,11 @@
 {
   "@context": "http://schema.org",
   "@type": "BlogPosting",
-  "description": "{{ description }}",
+  "description": "{{ description|e('html') }}",
   "author": "{{ author }}",
   "datePublished": "{{ create_time|date(fmt_iso8601_date) }}",
   "dateModified": "{{ update_time|date(fmt_iso8601_date) }}",
-  "headline": "{{ title }}",
+  "headline": "{{ title|e('html') }}",
   "mainEntityOfPage": {
     "@type": "WebPage"
   },

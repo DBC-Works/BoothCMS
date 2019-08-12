@@ -59,7 +59,7 @@ final class BoothCmsApp {
         }
         $content_path = urldecode(explode('?', $request_path)[0]);
 
-        $provider = new ContentsProvider(__DIR__ . '/contents');
+        $provider = new ContentsProvider(__DIR__ . '/contents', new DateTime());
         $controller = new Controller($provider, $this->config, $env);
         return $controller->render($content_path !== '' && $content_path !== '/' ? $content_path : '/index');
     }

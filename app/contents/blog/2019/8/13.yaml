@@ -1,0 +1,21 @@
+---
+Title: Version 0.5.0 release
+Date: 2019-08-13
+Category: Announcement
+Tags: 
+  - Release
+  - Announcement
+  - Blog
+StructuredData: 
+  - 
+    Type: BlogPosting
+...
+I published 'BoothCMS' version 0.5.0. It contains these updates:
+
+* Add `ReleaseTime` header support([#15](https://github.com/DBC-Works/BoothCMS/issues/15))
+    * The content can't be accessed when the date and time of this header is in the future
+* Correct structured data template
+* Correct document typo
+* Change testing framework from [pear(`run-tests`)](https://pear.php.net/manual/en/guide.users.commandline.commands.php) to [PHPUnit](https://phpunit.readthedocs.io/ja/latest/#)
+
+[https://github.com/DBC-Works/BoothCMS](https://github.com/DBC-Works/BoothCMS)

@@ -10,7 +10,7 @@
   "url": "{{ site_url }}{{ path }}",
   "datePublished": "{{ create_time|date(fmt_iso8601_date) }}",
   "dateModified": "{{ update_time|date(fmt_iso8601_date) }}",
-  "headline": "{{ title }}",
+  "headline": "{{ title|e('html') }}",
   "publisher": {
     "@type": "Organization",
     "name": "{{ site_author }}",
@@ -52,6 +52,6 @@
 {% if item_reviewed_same_as %}
     "sameAs": "{{ item_reviewed_same_as }}",
 {% endif %}
-    "name": "{{ item_reviewed_name }}"
+    "name": "{{ item_reviewed_name|e('html') }}"
   }
 }

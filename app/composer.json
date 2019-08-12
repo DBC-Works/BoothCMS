@@ -1,7 +1,17 @@
 {
+    "name": "dbc-works/booth-cms",
+    "description": "Simple flat file CMS",
     "require": {
         "mustangostang/spyc": "^0.6.2",
         "twig/twig": "~2.0",
         "erusev/parsedown": "^1.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "scripts": {
+        "test": [
+            ".\\vendor\\bin\\phpunit ..\\tests"
+        ]
     }
 }

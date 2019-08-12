@@ -1,10 +1,5 @@
-*.log
-*.diff
-*.out
-*.exp
 .vscode/**
 app/aspnet_client/**
 app/vendor/**
-tests/controllers/**/*.php
-tests/models/**/*.php
 tests/cache/**
+tests/.phpunit.result.cache

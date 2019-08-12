@@ -131,7 +131,6 @@ final class Content
     }
 
     /**
-     * 
      * Detect content delimiter string
      *
      * @param string $content content
@@ -157,6 +156,25 @@ final class Content
         return $end_of_doc_marker_info[0] < $directive_separator_info[0]
                 ? $re_end_of_doc_marker
                 : $re_directive_separator;
+    }
+
+    /**
+     * Parse date and time literal
+     * 
+     * @param string $literal date and time literal
+     * @return DateTime parsed date and time
+     */
+    private static function parseDateAndTimeLiteral(string $literal): DateTime {
+        if (strpos($literal, '+') !== false) {
+            $dt = DateTime::createFromFormat(DateTime::ATOM, $literal);
+            $format = DateTime::ATOM;
+        } else if (strpos($literal, 'T') !== false) {
+            $dt = DateTime::createFromFormat('Y-m-d\TH:i:s', $literal);
+        } else {
+            $dt = DateTime::createFromFormat('Y-m-d', $literal);
+            $dt->setTime(0, 0, 0);
+        }
+        return $dt;
     }
 
     private $headers;
@@ -207,20 +225,32 @@ final class Content
      * @return DateTime
      */
     public function getDateAndTime(): DateTime {
-        $dt = $this->last_update_time;
         $literal = $this->getValueOf('DateAndTime', false);
         if (is_null($literal)) {
             $literal = $this->getValueOf('Date', false);
-            if (is_null($literal) === false) {
-                $dt = DateTime::createFromFormat('Y-m-d', $literal);
-                $dt->setTime(0, 0, 0);
-            }
         }
-        else {
-            $dt = DateTime::createFromFormat(strpos($literal, '+') !== false ? DateTime::ATOM : 'Y-m-d\TH:i:s',
-                                            $literal);
-        }
-        return $dt;
+        return is_null($literal) ? $this->last_update_time : self::parseDateAndTimeLiteral($literal);
+    }
+
+    /**
+     * Release time
+     * 
+     * @return DateTime release time
+     */
+    public function getReleaseTime(): DateTime {
+        return $this->hasHeader('ReleaseTime')
+            ? self::parseDateAndTimeLiteral($this->getValueOf('ReleaseTime', true))
+            : $this->getDateAndTime();
+    }
+
+    /**
+     * Released?
+     * 
+     * @param DateTime $time current time
+     * @return bool
+     */
+    public function released(DateTime $time): bool {
+        return $this->hasHeader('ReleaseTime') ? $this->getReleaseTime() <= $time : true;
     }
 
     /**
@@ -298,6 +328,22 @@ final class Content
     public function getTemplate(): string {
         assert($this-hasTemplate());
         return $this->getValueOf('Template', true);
+    }
+
+    /**
+     * Get languages
+     * 
+     * @return array array of ISO 639-1 code
+     */
+    public function getLanguages(): array {
+        $languages = [];
+        if ($this->hasTitle()) {
+            $title = $this->getValueOf('Title', true);
+            if (is_array($title)) {
+                $languages = array_keys($title);
+            }
+        }
+        return $languages;
     }
 
     /**

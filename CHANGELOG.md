@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+Version 0.5.0(2019-08-13)
+-------------------------
+
+* Add `ReleaseTime` header support(#15)
+    * The content can't be accessed when the date and time of this header is in the future
+* Correct structured data template
+* Correct document typo
+* Change testing framework from [pear(`run-tests`)](https://pear.php.net/manual/en/guide.users.commandline.commands.php) to [PHPUnit](https://phpunit.readthedocs.io/ja/latest/#)
+
 Version 0.4.3(2019-04-20)
 -------------------------
 

@@ -32,11 +32,17 @@ Category of the content. You should select a value from [Wordnet for the Web](ht
 
 ##### Date
 
-Publich date. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+Publish date. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
 
 ##### DateAndTime
 
-Publich date and time. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+Publish date and time. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+
+##### ReleaseTime
+
+Release date and time. Describe in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+
+The content can't be accessed when the date and time of this header is in the future.
 
 ##### Description
 

@@ -50,9 +50,10 @@ final class ContentsProvider
      *
      * @param string $content_dir_path contents directory path
      * @param string $child_path child directory path
+     * @param DateTime $now current time
      * @return array
      */
-    private static function load(string $contents_dir_path, string $child_path): array {
+    private static function load(string $contents_dir_path, string $child_path, DateTime $now): array {
         assert(file_exists($contents_dir_path) && is_dir($contents_dir_path));
 
         $contents = [];
@@ -62,14 +63,17 @@ final class ContentsProvider
             $entry_path = $dir_path . '/' . $entry;
             if (is_dir($entry_path)) {
                 if ($entry !== '.' && $entry !== '..') {
-                    $child_contents = self::load($contents_dir_path, $child_path . '/' . $entry);
+                    $child_contents = self::load($contents_dir_path, $child_path . '/' . $entry, $now);
                     $contents = array_merge($contents, $child_contents);
                 }
             }
             else {
                 $ext = mb_strtolower(pathinfo($entry, PATHINFO_EXTENSION));
                 if ($ext === 'md' || $ext === 'yaml' || $ext === 'yml') {
-                    $contents[$child_path . '/' . pathinfo($entry, PATHINFO_FILENAME)] = Content::load($entry_path);
+                    $content = Content::load($entry_path);
+                    if ($content->released($now) !== false) {
+                        $contents[$child_path . '/' . pathinfo($entry, PATHINFO_FILENAME)] = $content;
+                    }
                 }
             }
         }
@@ -102,11 +106,12 @@ final class ContentsProvider
      * Constructor
      *
      * @param string $content_dir_path contents directory path
+     * @param DateTime $now current time
      */
-    public function __construct(string $contents_dir_path) {
+    public function __construct(string $contents_dir_path, DateTime $now) {
         assert(is_null($content_dir_path) === false && file_exists($content_dir_path) && is_dir($content_dir_path));
 
-        $this->contents = self::load(rtrim($contents_dir_path, '/\\'), '');
+        $this->contents = self::load(rtrim($contents_dir_path, '/\\'), '', $now);
         uasort($this->contents, function($lhs, $rhs) {
             if ($lhs->getDateAndTime() === $rhs->getDateAndTime()) {
                 return 0;
@@ -218,6 +223,27 @@ final class ContentsProvider
             }
         }
         return self::createSubsetInfo($descendants, $max_count, $page_index);
+    }
+
+    /**
+     * Get languages
+     * 
+     * @return array array of ISO 639-1 code
+     */
+    public function getLanguages(): array {
+        $languages = [];
+        foreach ($this->getListUpContents() as $key => $value) {
+            foreach ($value->getLanguages() as $lang) {
+                if (array_key_exists($lang, $languages) === false) {
+                    $languages[$lang] = 0;
+                }
+                $languages[$lang] = $languages[$lang] + 1;
+            }
+        }
+        uasort($languages, function($lhs, $rhs) {
+            return $lhs - $rhs;
+        });
+        return array_keys($languages);
     }
 
     /**
